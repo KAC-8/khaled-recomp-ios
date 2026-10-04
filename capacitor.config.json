@@ -1,0 +1,7 @@
+{
+  "appId":"me.kac8.recomp",
+  "appName":"Khalid Recomp",
+  "webDir":"www",
+  "server":{"iosScheme":"https"},
+  "ios":{"contentInset":"always","preferredContentMode":"mobile"}
+}
