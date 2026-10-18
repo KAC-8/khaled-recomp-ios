@@ -1,0 +1,1086 @@
+:root {
+  --surface: #fff;
+  --panel: #eeeef0;
+  --panel-strong: #e8e8eb;
+  --canvas: #eeeeef;
+  --field: #fff;
+  --solid: #18181b;
+  --on-solid: #fff;
+  --header-bg: rgba(247, 247, 248, 0.94);
+  --line-strong: #b0b0b8;
+  --dim: #686870;
+  --soft-shadow: 0 12px 40px #00000008;
+}
+html[data-theme="dark"] {
+  --bg: #111214;
+  --ink: #f2f2f3;
+  --muted: #adb0b9;
+  --line: #34363e;
+  --orange: #ff7137;
+  --accent-text: #ffa276;
+  --surface: #191b20;
+  --panel: #202329;
+  --panel-strong: #282c33;
+  --canvas: #181a1e;
+  --field: #1c1f25;
+  --solid: #f2f2f3;
+  --on-solid: #15171b;
+  --header-bg: rgba(17, 18, 20, 0.94);
+  --line-strong: #606570;
+  --dim: #a9adb7;
+  --soft-shadow: 0 12px 40px #0002;
+}
+html[data-theme] {
+  background: var(--bg);
+  color: var(--ink);
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+body {
+  background: var(--bg);
+}
+.header {
+  background: var(--header-bg);
+}
+.eyebrow {
+  color: var(--muted);
+}
+.button,
+.play-button,
+.check-button.checked,
+.energy-field label.selected > span,
+.is-done .habit-check {
+  background: var(--solid);
+  color: var(--on-solid);
+  border-color: var(--solid);
+}
+.skip-link,
+.toast:not(:empty) {
+  background: var(--solid);
+  color: var(--on-solid);
+}
+.update-notice {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.update-notice > button {
+  color: inherit;
+}
+.app-icon {
+  background: #18181b;
+  color: #f7f7f8;
+}
+.button:hover {
+  background: var(--solid);
+  filter: brightness(0.9);
+}
+.button.secondary {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+.icon-button:hover,
+.install-button:hover {
+  background: var(--panel-strong);
+}
+.theme-button {
+  width: 35px;
+  height: 40px;
+  border: 1px solid transparent;
+}
+.theme-button:hover {
+  border-color: var(--line);
+}
+.metric-card,
+.chart-panel,
+.habit {
+  background: var(--surface);
+}
+.training-card,
+.session-metric,
+.rest-timer {
+  background: var(--panel-strong);
+}
+.approach-hero,
+.care-note,
+.history-table th,
+.level-toggle > button.active,
+.session-tabs > button.active,
+.period-tabs > button.active,
+.habit.is-done,
+.exercise-selector > button.selected {
+  background: var(--panel);
+}
+.session-letter {
+  background: var(--panel-strong);
+}
+.exercise-selector > button:hover {
+  background: var(--panel-strong);
+}
+.exercise-selector > button > span,
+.technique li > span,
+.approach-card > div > span,
+.nutrition-basics > article > span {
+  color: var(--dim);
+}
+.movement-stage,
+.stage-controls,
+.demo-note {
+  background: var(--canvas);
+}
+.stage-controls {
+  border-color: var(--line);
+}
+.stage-top,
+.stage-hint,
+.demo-note {
+  color: var(--muted);
+}
+.stage-3d {
+  border-color: var(--line-strong);
+}
+.view-button {
+  border-color: var(--line);
+}
+.chart-options > select,
+.log-form input:not([type="radio"]),
+.log-form textarea {
+  background: var(--field);
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+.energy-field label > span {
+  border-color: var(--line-strong);
+}
+.log-form input::placeholder,
+.log-form textarea::placeholder {
+  color: var(--dim);
+}
+.history-table th,
+.history-table td {
+  border-color: var(--line);
+}
+.chart svg line {
+  stroke: var(--line);
+}
+.chart svg text {
+  fill: var(--muted);
+}
+.chart svg polyline {
+  stroke: var(--accent-text);
+}
+.chart svg circle:not([fill="transparent"]) {
+  fill: var(--accent-text);
+  stroke: var(--surface);
+}
+.caution {
+  color: var(--accent-text);
+}
+.card-top > span {
+  opacity: 1;
+  color: var(--muted);
+}
+.food-card .card-top > span,
+.progress-card .card-top > span {
+  color: #ddd;
+}
+.mobile-menu,
+.modal-header {
+  background: var(--bg);
+}
+.bottom-nav {
+  background: var(--header-bg);
+}
+.chart-foot,
+.body-fields {
+  border-color: var(--line);
+}
+.status-banner {
+  background: var(--panel-strong);
+  color: var(--muted);
+}
+html[data-theme="dark"] .inline-notice,
+html[data-theme="dark"] .status-banner.warning {
+  background: #33271f;
+  color: #f3bfa1;
+}
+html[data-theme="dark"] .form-error {
+  color: #ffb2a7;
+  border-color: #835044;
+}
+html[data-theme="dark"] .delete-confirm {
+  color: #ffac9b;
+}
+html[data-theme="dark"] .progress-card {
+  border: 1px solid var(--line);
+}
+html[data-theme="dark"] .mini-lines i {
+  background: #555b65;
+}
+html[data-theme="dark"] .mini-lines i:nth-child(3) {
+  background: var(--orange);
+}
+.home-week {
+  margin-top: 35px;
+}
+.week-planner {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 22px 24px 0;
+  margin-bottom: 32px;
+  box-shadow: var(--soft-shadow);
+}
+.week-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.week-caption {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.week-caption > svg {
+  color: var(--accent-text);
+}
+.week-caption > span {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 500;
+}
+.week-caption > strong {
+  font-size: 12px;
+  font-weight: 400;
+  margin-inline-start: 12px;
+  white-space: nowrap;
+}
+.week-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.week-actions > .icon-button {
+  width: 34px;
+  height: 34px;
+}
+.week-today {
+  font-size: 11px;
+  padding: 8px 13px;
+  margin-inline-end: 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  min-height: 34px;
+}
+.week-today:hover {
+  background: var(--panel);
+}
+html[dir="ltr"] .week-actions > .icon-button svg {
+  transform: scaleX(-1);
+}
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+.week-day {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 4px;
+  background: var(--bg);
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.week-day > span:first-child {
+  font-size: 10px;
+  line-height: 1.5;
+}
+.week-day > strong {
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+.day-plan-tag {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.day-plan-tag.is-flex {
+  color: var(--accent-text);
+}
+.week-day.is-today:before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 9px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+.week-day.is-active {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+.week-day.is-active .day-plan-tag {
+  color: var(--bg);
+}
+.day-data-dot {
+  position: absolute;
+  bottom: 6px;
+  inset-inline-end: 7px;
+  display: grid;
+  place-items: center;
+  color: var(--accent-text);
+}
+.week-day.is-active .day-data-dot {
+  color: var(--bg);
+}
+.week-day:hover:not(.is-active) {
+  background: var(--panel);
+  border-color: var(--line-strong);
+}
+.day-brief {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr auto;
+  align-items: center;
+  gap: 25px;
+  margin-top: 21px;
+  padding: 21px 0;
+  border-top: 1px solid var(--line);
+}
+.day-brief-title h2 {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.5;
+  margin-top: 7px;
+}
+.day-brief-title p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-top: 7px;
+  max-width: 500px;
+}
+.day-brief-details {
+  display: flex;
+  gap: 28px;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 24px;
+}
+.day-brief-details > span {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.day-brief-details > span > strong {
+  font-family: Arial, sans-serif;
+  font-size: 27px;
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+.day-brief-details small {
+  font-size: 12px;
+  margin-inline-start: 5px;
+  color: var(--muted);
+}
+.day-brief-details > a {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+  padding-inline-end: 16px;
+  font-size: 10px;
+}
+.day-brief-details > a > span {
+  color: var(--muted);
+}
+.day-brief-details > a > strong {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.8;
+}
+.day-brief-details > a > svg {
+  transform: rotate(-90deg);
+  position: absolute;
+  inset-inline-end: 0;
+  top: 0;
+}
+html[dir="rtl"] .day-brief-details > a > svg {
+  transform: rotate(90deg);
+}
+.week-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  min-height: 40px;
+  white-space: nowrap;
+  color: var(--muted);
+}
+.week-edit:hover {
+  color: var(--ink);
+}
+.week-edit-form {
+  padding: 25px 28px;
+}
+.week-edit-form > p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.week-edit-form > label {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 13px;
+  font-size: 12px;
+}
+.week-edit-form select {
+  padding: 11px;
+  min-height: 46px;
+  min-width: 0;
+  background: var(--field);
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.week-edit-form > .button {
+  margin-top: 12px;
+}
+.focus-balance {
+  margin: 34px 0 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.balance-heading {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+}
+.balance-heading p {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 440px;
+}
+.balance-columns {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+}
+.balance-columns > article {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 27px 25px;
+}
+.balance-flex {
+  border-inline-start: 1px solid var(--line);
+  background: var(--panel);
+}
+.balance-number {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 58px;
+  font-weight: 400;
+  letter-spacing: -0.07em;
+  flex-shrink: 0;
+  line-height: 1.1;
+}
+.balance-number > small {
+  font-size: 19px;
+  letter-spacing: -0.03em;
+  margin-inline-start: 4px;
+}
+.balance-core .balance-number {
+  color: var(--accent-text);
+}
+.balance-columns h3 {
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 500;
+  margin-bottom: 9px;
+}
+.balance-columns p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.daily-meal-ideas {
+  padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.daily-meal-ideas > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+  margin: 22px 0;
+}
+.daily-meal-ideas article {
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 23px;
+}
+.daily-meal-ideas article:first-child {
+  border: 0;
+  padding: 0;
+}
+.daily-meal-ideas article > span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.daily-meal-ideas article > p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 9px;
+}
+.daily-reflection {
+  display: flex;
+  gap: 35px;
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  padding: 0 0 26px;
+  margin-bottom: 28px;
+}
+.daily-reflection > div:first-child {
+  flex: 1;
+}
+.daily-reflection h2 {
+  font-size: 25px;
+  font-weight: 500;
+  margin-top: 10px;
+  letter-spacing: -0.03em;
+}
+.daily-reflection > div:not(:first-child) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-inline-start: 1px solid var(--line);
+  padding-inline-start: 28px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.daily-reflection strong {
+  font-size: 34px;
+  font-family: Arial, sans-serif;
+  letter-spacing: -0.05em;
+  font-weight: 400;
+  color: var(--ink);
+}
+.daily-reflection small {
+  font-size: 12px;
+  color: var(--muted);
+  margin-inline-start: 5px;
+}
+.studio-options {
+  position: relative;
+  z-index: 3;
+  padding: 15px 21px;
+  border-top: 1px solid var(--line);
+  background: var(--canvas);
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+.camera-options {
+  display: flex;
+  gap: 3px;
+}
+.camera-options > button {
+  font-size: 10px;
+  min-height: 33px;
+  padding: 8px 11px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--muted);
+}
+.camera-options > button[aria-pressed="true"] {
+  border-color: var(--line-strong);
+  color: var(--ink);
+  background: var(--surface);
+}
+.studio-toggles {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+.studio-toggles > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 34px;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.studio-toggles > button[aria-pressed="true"] {
+  color: var(--accent-text);
+}
+@media (max-width: 1150px) {
+  .header-inner {
+    gap: 18px;
+  }
+  .desktop-nav {
+    gap: 18px;
+  }
+  .header-actions {
+    gap: 10px;
+  }
+  .brand {
+    font-size: 13px;
+  }
+  .day-brief {
+    gap: 18px;
+    grid-template-columns: 1.2fr 1fr auto;
+  }
+  .day-brief-title h2 {
+    font-size: 18px;
+  }
+  .day-brief-details {
+    padding-inline-start: 18px;
+    gap: 20px;
+  }
+  .balance-columns > article {
+    gap: 17px;
+    padding: 23px 21px;
+  }
+  .balance-number {
+    font-size: 49px;
+  }
+  .balance-columns h3 {
+    font-size: 16px;
+  }
+  .studio-options {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .studio-toggles {
+    justify-content: space-between;
+  }
+  .week-caption > strong {
+    margin-inline-start: 0;
+  }
+  .daily-reflection {
+    gap: 25px;
+  }
+  .daily-reflection > div:not(:first-child) {
+    padding-inline-start: 22px;
+  }
+}
+@media (max-width: 900px) {
+  .week-planner {
+    padding: 18px 18px 0;
+  }
+  .week-header {
+    gap: 10px;
+  }
+  .week-caption {
+    gap: 8px;
+    max-width: 70%;
+  }
+  .week-caption > strong {
+    flex-basis: 100%;
+    margin-inline-start: 26px;
+    font-size: 11px;
+  }
+  .week-caption > span {
+    font-size: 9px;
+  }
+  .day-brief {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 15px;
+  }
+  .week-edit {
+    grid-column: 1/-1;
+    justify-self: end;
+    min-height: 28px;
+    margin-top: -4px;
+  }
+  .day-brief-details {
+    gap: 18px;
+    padding-inline-start: 20px;
+  }
+  .week-day {
+    min-height: 98px;
+    gap: 7px;
+  }
+  .week-day > strong {
+    font-size: 23px;
+  }
+  .balance-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .balance-columns > article {
+    align-items: flex-start;
+    gap: 15px;
+    flex-direction: column;
+  }
+  .balance-number {
+    font-size: 46px;
+  }
+  .daily-reflection h2 {
+    font-size: 22px;
+  }
+  .daily-reflection > div:not(:first-child) {
+    padding-inline-start: 17px;
+  }
+  .daily-reflection {
+    gap: 20px;
+  }
+  .daily-reflection strong {
+    font-size: 30px;
+  }
+}
+@media (max-width: 700px) {
+  .header-actions {
+    gap: 9px;
+  }
+  .theme-button {
+    width: 31px;
+    height: 36px;
+  }
+  .header-inner {
+    gap: 10px;
+  }
+  .brand {
+    font-size: 13px;
+  }
+  .home-week {
+    margin-top: 28px;
+  }
+  .week-planner {
+    padding: 17px 12px 0;
+    border-radius: 7px;
+    margin-bottom: 25px;
+  }
+  .week-header {
+    margin-bottom: 16px;
+    align-items: center;
+    gap: 7px;
+  }
+  .week-caption {
+    max-width: 65%;
+    gap: 6px;
+  }
+  .week-caption > svg {
+    width: 16px;
+  }
+  .week-caption > span {
+    font-size: 8px;
+    letter-spacing: 0;
+  }
+  html[lang="ar"] .week-caption > span {
+    font-size: 10px;
+  }
+  .week-caption > strong {
+    font-size: 9px;
+    margin-inline-start: 22px;
+    line-height: 1.6;
+  }
+  .week-actions {
+    gap: 0;
+  }
+  .week-actions > .icon-button {
+    width: 27px;
+    height: 34px;
+  }
+  .week-today {
+    font-size: 9px;
+    padding: 6px 8px;
+    margin-inline-end: 1px;
+    min-height: 31px;
+  }
+  .week-days {
+    gap: 4px;
+  }
+  .week-day {
+    min-height: 90px;
+    padding: 11px 2px;
+    gap: 7px;
+    border-radius: 4px;
+  }
+  .week-day > span:first-child {
+    font-size: 8px;
+  }
+  html[lang="ar"] .week-day > span:first-child {
+    font-size: 9px;
+  }
+  .week-day > strong {
+    font-size: 22px;
+  }
+  .day-plan-tag {
+    font-size: 8px;
+  }
+  .week-day.is-today:before {
+    top: 5px;
+    inset-inline-end: 5px;
+    width: 3px;
+    height: 3px;
+  }
+  .day-data-dot {
+    bottom: 4px;
+    inset-inline-end: 3px;
+  }
+  .day-brief {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 17px;
+    padding: 17px 2px;
+  }
+  .day-brief-title .small-label {
+    font-size: 9px;
+  }
+  .day-brief-title h2 {
+    font-size: 18px;
+    margin-top: 6px;
+  }
+  .day-brief-title p {
+    font-size: 11px;
+    margin-top: 7px;
+  }
+  .day-brief-details {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+    gap: 24px;
+    justify-content: flex-start;
+  }
+  .day-brief-details > span {
+    font-size: 9px;
+    gap: 4px;
+  }
+  .day-brief-details > span > strong {
+    font-size: 22px;
+  }
+  .day-brief-details > a {
+    flex: 1;
+    gap: 5px;
+  }
+  .day-brief-details > a > span {
+    font-size: 9px;
+  }
+  .day-brief-details > a > strong {
+    font-size: 10px;
+  }
+  .week-edit {
+    grid-column: auto;
+    font-size: 9px;
+    min-height: 27px;
+  }
+  .week-train .day-brief-details,
+  .week-approach .day-brief-details,
+  .week-nutrition .day-brief-details {
+    display: none;
+  }
+  .week-edit-form {
+    padding: 22px 20px;
+  }
+  .week-edit-form > p {
+    font-size: 11px;
+    margin-bottom: 19px;
+  }
+  .week-edit-form > label {
+    grid-template-columns: 68px 1fr;
+    gap: 9px;
+    font-size: 11px;
+  }
+  .week-edit-form select {
+    font-size: 11px;
+    padding: 11px 9px;
+    min-height: 45px;
+  }
+  .balance-heading {
+    padding: 18px;
+    gap: 9px;
+  }
+  .balance-heading p {
+    font-size: 10px;
+  }
+  .balance-heading .small-label {
+    font-size: 10px;
+  }
+  .focus-balance {
+    margin: 27px 0 30px;
+    border-radius: 7px;
+  }
+  .balance-columns {
+    grid-template-columns: 1fr;
+  }
+  .balance-columns > article {
+    align-items: flex-start;
+    flex-direction: row;
+    padding: 22px 18px;
+    gap: 19px;
+  }
+  .balance-number {
+    font-size: 43px;
+    min-width: 75px;
+  }
+  .balance-number > small {
+    font-size: 14px;
+  }
+  .balance-columns h3 {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .balance-columns p {
+    font-size: 11px;
+  }
+  .balance-flex {
+    border-inline-start: 0;
+    border-top: 1px solid var(--line);
+  }
+  .daily-meal-ideas {
+    padding: 20px;
+  }
+  .daily-meal-ideas > div {
+    grid-template-columns: 1fr;
+    gap: 17px;
+    margin: 19px 0;
+  }
+  .daily-meal-ideas article {
+    padding: 0 0 0 0;
+    border-inline-start: 0;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 17px;
+  }
+  .daily-meal-ideas article:first-child {
+    padding-bottom: 17px;
+    border-bottom: 1px solid var(--line);
+  }
+  .daily-meal-ideas article:last-child {
+    border: 0;
+    padding-bottom: 0;
+  }
+  .daily-meal-ideas article > p {
+    font-size: 16px;
+    margin-top: 5px;
+  }
+  .daily-reflection {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 13px;
+    padding-bottom: 23px;
+    margin-bottom: 23px;
+  }
+  .daily-reflection > div:first-child {
+    grid-column: 1/-1;
+  }
+  .daily-reflection h2 {
+    font-size: 23px;
+    margin-top: 9px;
+  }
+  .daily-reflection > div:not(:first-child) {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+    font-size: 9px;
+    gap: 6px;
+  }
+  .daily-reflection strong {
+    font-size: 29px;
+  }
+  .daily-reflection small {
+    font-size: 10px;
+  }
+  .studio-options {
+    padding: 13px 15px;
+    gap: 10px;
+    flex-direction: column;
+  }
+  .camera-options {
+    justify-content: space-between;
+  }
+  .camera-options > button {
+    font-size: 10px;
+    min-height: 34px;
+    flex: 1;
+    padding: 8px;
+  }
+  .studio-toggles {
+    justify-content: space-between;
+    gap: 15px;
+  }
+  .studio-toggles > button {
+    font-size: 10px;
+    min-height: 35px;
+  }
+  .day-brief .small-label {
+    letter-spacing: 0;
+  }
+  .home-week .week-caption > strong {
+    font-size: 9px;
+  }
+}
+@media (max-width: 375px) {
+  .header-actions {
+    gap: 6px;
+  }
+  .brand {
+    font-size: 12px;
+    gap: 6px;
+  }
+  .brand svg {
+    width: 22px;
+  }
+  .lang-button {
+    gap: 4px;
+  }
+  .week-caption > strong {
+    font-size: 8px;
+  }
+  .week-caption > span {
+    font-size: 7px;
+  }
+  html[lang="ar"] .week-caption > span {
+    font-size: 9px;
+  }
+  .week-day > span:first-child {
+    font-size: 8px !important;
+  }
+  .day-plan-tag {
+    font-size: 7px;
+  }
+  .balance-columns > article {
+    gap: 14px;
+  }
+  .balance-number {
+    font-size: 40px;
+    min-width: 69px;
+  }
+  .week-today {
+    padding-inline: 6px;
+  }
+}

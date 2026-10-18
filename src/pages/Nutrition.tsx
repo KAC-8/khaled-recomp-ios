@@ -10,11 +10,15 @@ import {
 } from "lucide-react";
 import { PageHeading, Reveal } from "../components/UI";
 import { today, useApp } from "../lib/store";
+import { dayIndex, mealIdeas } from "../lib/calendar";
+import WeekPlanner from "../components/WeekPlanner";
+import FocusBalance from "../components/FocusBalance";
 
 export default function Nutrition() {
-  const { t, habits, toggleHabit } = useApp();
+  const { t, habits, toggleHabit, selectedDate, pair } = useApp();
   const [meal, setMeal] = useState(0);
-  const done = habits[today()] || [];
+  const done = habits[selectedDate] || [];
+  const idea = mealIdeas[dayIndex(selectedDate)];
   const meals = [
     {
       name: t("الفطور", "Breakfast"),
@@ -109,6 +113,34 @@ export default function Nutrition() {
           "Simple habits. Food you enjoy. Enough energy for training, school and growth.",
         )}
       />
+      <WeekPlanner kind="nutrition" />
+      <div className="daily-meal-ideas">
+        <span className="small-label">
+          {t(
+            "اقتراحات مرنة لليوم المحدد",
+            "FLEXIBLE IDEAS FOR YOUR SELECTED DAY",
+          )}
+        </span>
+        <div>
+          {[
+            [t("الفطور", "Breakfast"), pair(idea.breakfast)],
+            [t("الغداء", "Lunch"), pair(idea.lunch)],
+            [t("العشاء", "Dinner"), pair(idea.dinner)],
+          ].map(([name, food]) => (
+            <article key={name}>
+              <span>{name}</span>
+              <p>{food}</p>
+            </article>
+          ))}
+        </div>
+        <p className="subtle">
+          {t(
+            "أفكار وليست حصصًا غذائية مفروضة؛ اختر ما يناسب شهيتك واحتياجاتك وحساسياتك.",
+            "Ideas, not prescribed portions. Adapt to your appetite, needs and dietary restrictions.",
+          )}
+        </p>
+      </div>
+      <FocusBalance kind="nutrition" />
       <div className="nutrition-layout">
         <div className="nutrition-visual">
           <img
@@ -211,6 +243,7 @@ export default function Nutrition() {
               className={`habit ${done.includes(h.id) ? "is-done" : ""}`}
               onClick={() => toggleHabit(h.id)}
               aria-pressed={done.includes(h.id)}
+              disabled={selectedDate > today()}
             >
               <h.icon size={25} strokeWidth={1.5} />
               <span>{h.name}</span>
@@ -222,8 +255,12 @@ export default function Nutrition() {
         </div>
         <p className="subtle">
           {t(
-            "لليوم فقط. ليس عليك إكمال كل شيء لتكون يومك جيدًا.",
-            "Just for today. You don’t have to tick every box to have a good day.",
+            selectedDate > today()
+              ? "يوم قادم: يمكنك التخطيط الآن وتسجيل العادات في يومها."
+              : "للتاريخ المحدد فقط. ليس عليك إكمال كل شيء ليكون يومك جيدًا.",
+            selectedDate > today()
+              ? "A future day: plan now and check in on the day."
+              : "For the selected date. You don’t need every box checked to have a good day.",
           )}
         </p>
       </Reveal>

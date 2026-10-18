@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Lang, Pair } from "./data";
+import { defaultWeekPlan } from "./calendar";
+import type { WeekPlan } from "./calendar";
 
 export interface Log {
   id: string;
@@ -24,6 +26,7 @@ interface Saved {
   training: Training[];
   habits: Record<string, string[]>;
   hideBody: boolean;
+  weekPlan: WeekPlan;
 }
 const KEY = "khalid-cut-v1";
 export function today() {
@@ -130,6 +133,14 @@ export function validateBackup(raw: unknown): Saved {
     ),
     habits,
     hideBody: !!d.hideBody,
+    weekPlan: Object.fromEntries(
+      Object.keys(defaultWeekPlan).map((day) => [
+        day,
+        ["a", "b", "c", "rest"].includes(d.weekPlan?.[day])
+          ? d.weekPlan[day]
+          : defaultWeekPlan[day],
+      ]),
+    ) as WeekPlan,
   };
 }
 const empty: Saved = {
@@ -138,6 +149,7 @@ const empty: Saved = {
   training: [],
   habits: {},
   hideBody: false,
+  weekPlan: defaultWeekPlan,
 };
 function read(): Saved {
   try {
@@ -179,7 +191,10 @@ function read(): Saved {
           }
           return log;
         });
-      return { ...empty, logs };
+      return {
+        ...empty,
+        logs: logs.sort((a, b) => a.date.localeCompare(b.date)),
+      };
     }
   } catch {
     /* Preserve the original storage if a previous version is unreadable. */
@@ -195,6 +210,11 @@ interface AppState extends Saved {
   removeLog: (id: string) => void;
   toggleExercise: (session: string, id: string) => void;
   toggleHabit: (id: string) => void;
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
+  setWeekPlan: (plan: WeekPlan) => void;
+  theme: "light" | "dark";
+  toggleTheme: () => void;
   toggleBody: () => void;
   importData: (d: unknown) => void;
   backup: () => Saved;
@@ -206,6 +226,10 @@ const Context = createContext<AppState | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [saved, setSaved] = useState(read);
   const [storageError, setStorageError] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(today);
+  const [theme, setTheme] = useState<"light" | "dark">(() =>
+    document.documentElement.dataset.theme === "dark" ? "dark" : "light",
+  );
   const [lang, setLang] = useState<Lang>(() => {
     try {
       return localStorage.getItem("kr-lang") === "en" ? "en" : "ar";
@@ -214,6 +238,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   });
   const [toast, notify] = useState("");
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#111214" : "#f7f7f8");
+  }, [theme]);
   useEffect(() => {
     try {
       localStorage.setItem(KEY, JSON.stringify(saved));
@@ -242,6 +273,17 @@ export function AppProvider({ children }: { children: ReactNode }) {
     storageError,
     toast,
     notify,
+    selectedDate,
+    setSelectedDate,
+    setWeekPlan: (plan) => setSaved((s) => ({ ...s, weekPlan: plan })),
+    theme,
+    toggleTheme: () => {
+      const next = theme === "dark" ? "light" : "dark";
+      setTheme(next);
+      try {
+        localStorage.setItem("kc-theme", next);
+      } catch {}
+    },
     toggleLang: () => setLang((l) => (l === "ar" ? "en" : "ar")),
     t: (ar, en) => (lang === "ar" ? ar : en),
     pair: (p) => p[lang === "ar" ? 0 : 1],
@@ -256,10 +298,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setSaved((s) => ({ ...s, logs: s.logs.filter((l) => l.id !== id) })),
     toggleExercise: (session, id) =>
       setSaved((s) => {
-        const date = today(),
+        const date = selectedDate,
           old = s.training.find(
             (t) => t.date === date && t.session === session,
           );
+        if (!validDate(date)) return s;
         return {
           ...s,
           training: [
@@ -276,8 +319,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       }),
     toggleHabit: (id) =>
       setSaved((s) => {
-        const date = today(),
+        const date = selectedDate,
           values = s.habits[date] || [];
+        if (!validDate(date)) return s;
         return {
           ...s,
           habits: {

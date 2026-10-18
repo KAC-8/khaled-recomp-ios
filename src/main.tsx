@@ -5,6 +5,7 @@ import { MotionConfig } from "motion/react";
 import { AppProvider } from "./lib/store";
 import App from "./App";
 import "./styles.css";
+import "./theme.css";
 
 const legacy: Record<string, string> = {
   home: "/",

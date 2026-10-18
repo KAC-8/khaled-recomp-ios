@@ -14,6 +14,9 @@ import {
 import { Modal, PageHeading } from "../components/UI";
 import { today, useApp, validDate, validateBackup } from "../lib/store";
 import type { Log } from "../lib/store";
+import WeekPlanner from "../components/WeekPlanner";
+import FocusBalance from "../components/FocusBalance";
+import { weekDates } from "../lib/calendar";
 
 type Metric = "push" | "pull" | "hold" | "weight" | "waist" | "energy";
 function download(name: string, data: string, type = "application/json") {
@@ -26,10 +29,13 @@ function download(name: string, data: string, type = "application/json") {
 }
 
 function LogForm({ log, onClose }: { log?: Log; onClose: () => void }) {
-  const { t, logs, saveLog, notify, hideBody } = useApp();
-  const [date, setDate] = useState(log?.date || today()),
-    [energy, setEnergy] = useState(log?.energy || 3),
-    [body, setBody] = useState(!hideBody && !!(log?.weight || log?.waist)),
+  const { t, logs, saveLog, notify, hideBody, selectedDate } = useApp();
+  const initialLog = log || logs.find((l) => l.date === selectedDate);
+  const [date, setDate] = useState(initialLog?.date || selectedDate),
+    [energy, setEnergy] = useState(initialLog?.energy || 3),
+    [body, setBody] = useState(
+      !hideBody && !!(initialLog?.weight || initialLog?.waist),
+    ),
     [error, setError] = useState("");
   const form = useRef<HTMLFormElement>(null);
   const existing = logs.find((l) => l.date === date);
@@ -37,11 +43,11 @@ function LogForm({ log, onClose }: { log?: Log; onClose: () => void }) {
     Object.fromEntries(
       ["weight", "waist", "push", "pull", "hold"].map((k) => [
         k,
-        String(log?.[k as keyof Log] ?? ""),
+        String(initialLog?.[k as keyof Log] ?? ""),
       ]),
     ),
   );
-  const [note, setNote] = useState(log?.note || "");
+  const [note, setNote] = useState(initialLog?.note || "");
   const chooseDate = (value: string) => {
     setDate(value);
     const old = logs.find((l) => l.date === value);
@@ -458,6 +464,8 @@ export default function Progress() {
     backup,
     importData,
     notify,
+    selectedDate,
+    habits,
   } = useApp();
   const [form, setForm] = useState<Log | null | false>(false),
     [metric, setMetric] = useState<Metric>("push"),
@@ -505,6 +513,12 @@ export default function Progress() {
       day: "numeric",
       calendar: "gregory",
     }).format(new Date(d + "T12:00:00"));
+  const selectedLog = logs.find((l) => l.date === selectedDate);
+  const currentWeek = weekDates(selectedDate);
+  const weekLogs = logs.filter((l) => currentWeek.includes(l.date));
+  const dayMoves = training
+    .filter((s) => s.date === selectedDate)
+    .reduce((n, s) => n + s.done.length, 0);
   return (
     <div className="page-container">
       <PageHeading
@@ -515,11 +529,43 @@ export default function Progress() {
           "Your strength, energy and how movement feels. A personal record to understand progress without pressure.",
         )}
       >
-        <button className="button" onClick={() => setForm(null)}>
+        <button
+          className="button"
+          onClick={() => setForm(null)}
+          disabled={selectedDate > today()}
+        >
           <Plus size={18} />
           {t("متابعة جديدة", "New check-in")}
         </button>
       </PageHeading>
+      <WeekPlanner kind="progress" />
+      <div className="daily-reflection">
+        <div>
+          <span className="small-label">
+            {t("اليوم المحدد", "SELECTED DAY")}
+          </span>
+          <h2>
+            {selectedLog
+              ? t("متابعتك محفوظة.", "Your check-in is saved.")
+              : t("مساحة لمتابعتك.", "Space for your check-in.")}
+          </h2>
+        </div>
+        <div>
+          <strong>
+            {selectedLog?.energy ?? "—"}
+            <small>/ 5</small>
+          </strong>
+          <span>{t("طاقة اليوم", "Day’s energy")}</span>
+        </div>
+        <div>
+          <strong>{dayMoves}</strong>
+          <span>{t("حركات مسجّلة", "moves logged")}</span>
+        </div>
+        <div>
+          <strong>{weekLogs.length}</strong>
+          <span>{t("متابعات هذا الأسبوع", "check-ins this week")}</span>
+        </div>
+      </div>
       <div className="metrics-grid">
         {(["push", "pull", "energy"] as Metric[]).map((m) => (
           <button
@@ -606,6 +652,7 @@ export default function Progress() {
           </button>
         </div>
       </section>
+      <FocusBalance kind="progress" />
       <section className="history-section">
         <div className="section-intro">
           <div>
@@ -668,7 +715,11 @@ export default function Progress() {
                 "Log your energy and performance. Other measurements are always optional.",
               )}
             </p>
-            <button className="text-link" onClick={() => setForm(null)}>
+            <button
+              className="text-link"
+              onClick={() => setForm(null)}
+              disabled={selectedDate > today()}
+            >
               <Plus size={16} />
               {t("سجّل أول متابعة", "Create your first check-in")}
             </button>

@@ -21,6 +21,10 @@ The production build is `dist/`. `vercel.json` configures Vite and direct-route 
 - Versioned JSON export and validated restore transfer data between browsers. Restore has a review step and replaces current records only after confirmation. Legacy `kr-logs` and `kr-lang` are read on the first visit; old undated exercise checkmarks are not assigned invented dates. An unreadable new-format store is retained under `khalid-cut-v1-recovery` before a fresh store is created.
 - Data stays in localStorage on the current browser. No account, server persistence or automatic cross-device sync. Clearing browser storage can delete records; export a backup. Storage errors are surfaced.
 - The PWA precaches routes, scripts, photographs, icons and fonts. Offline use is available after installation of the service worker during a complete online visit. Updates wait for the user so unsaved forms are not automatically discarded.
+- A direct header button switches light/dark and saves the preference. The first visit follows the operating-system preference; the pre-paint bootstrap avoids a light flash. The 3D studio also adapts its lighting and surfaces.
+- A shared week navigator appears in all five sections. Selecting a date carries it between client-side routes; reopening the app starts at today. Nutrition habits, sessions and check-in defaults use the selected date. Future days allow planning but cannot be marked complete. The repeating weekly training layout can be edited and is included in backups; older backups receive the default layout without losing records.
+- The 80/20 sections organize attention around foundations and optional flexibility. They are not calorie splits, rigid food quotas, adherence scores or claims about percentages of results. Daily meal suggestions are flexible examples, not prescribed amounts.
+- The enhanced 3D mannequin uses smoother contours, anatomical detail, four camera presets, half-speed playback and optional illustrative muscle highlights. The renderer stays lazy-loaded and pauses activity offscreen.
 - Content supports growth, regular meals, training quality and recovery. There is no calorie-deficit calculator, target weight-loss rate, BMI score or reward for weight loss. Intentional weight change for a minor is referred to a guardian and qualified clinician/dietitian. The prior gym schedule is removed from the product.
 
 ## Browser checks
@@ -30,6 +34,7 @@ With the production preview running on port 4173:
 ```sh
 npx playwright install chromium webkit
 npm run test:e2e
+npm run test:upgrade
 ```
 
 Set `QA_BASE` to test another origin. The script creates isolated browser contexts and tests route/language changes, 3D controls, dated sessions, rest timer, nutrition tabs/habits, check-in validation/editing/persistence, backup restore, deletion, PWA offline behavior, reduced motion, RTL/LTR at 360/390/768/1440/1920 px, WCAG A/AA automated checks, and a WebKit mobile flow. Reports and screenshots are written to ignored `test-results/`. Tests use synthetic local records only. Responsive/WebKit emulation is not a physical iPhone device test.

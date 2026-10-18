@@ -95,6 +95,10 @@ const localDate = (offset = 0) => {
         .click();
       const dialog = page.getByRole("dialog");
       await dialog
+        .locator(".session-tabs")
+        .getByRole("button", { name: "A · Foundation", exact: true })
+        .click();
+      await dialog
         .getByRole("button", { name: "Complete Push-up", exact: true })
         .click();
       await dialog
@@ -126,6 +130,10 @@ const localDate = (offset = 0) => {
       await page.reload();
       await page
         .getByRole("button", { name: "Start a session", exact: true })
+        .click();
+      await page
+        .locator(".session-tabs")
+        .getByRole("button", { name: "A · Foundation", exact: true })
         .click();
       assert.equal(
         await page

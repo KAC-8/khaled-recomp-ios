@@ -7,6 +7,22 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#f7f7f8" />
+    <script>
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem("kc-theme");
+        } catch (e) {}
+        if (theme !== "light" && theme !== "dark")
+          theme = matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content =
+          theme === "dark" ? "#111214" : "#f7f7f8";
+      })();
+    </script>
     <meta
       name="description"
       content="Khalid Cut — تدريب كالستنكس مدروس، تغذية متوازنة، وتتبع يحترم جسمك."

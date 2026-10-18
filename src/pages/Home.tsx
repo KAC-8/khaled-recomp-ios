@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { Action, Eyebrow, Reveal } from "../components/UI";
 import { useApp } from "../lib/store";
+import WeekPlanner from "../components/WeekPlanner";
+import FocusBalance from "../components/FocusBalance";
 
 export default function Home() {
   const { t, training, logs } = useApp();
@@ -89,6 +91,10 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+      <div className="home-week">
+        <WeekPlanner />
+      </div>
+      <FocusBalance />
       <div className="principle-strip">
         <span>{t("حركة مدروسة", "INTENTIONAL MOVEMENT")}</span>
         <span className="strip-cross">/</span>

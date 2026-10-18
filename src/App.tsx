@@ -9,6 +9,8 @@ import {
   Globe2,
   House,
   Menu,
+  Moon,
+  Sun,
   Utensils,
   WifiOff,
   X,
@@ -28,7 +30,8 @@ interface InstallEvent extends Event {
 }
 
 export default function App() {
-  const { t, lang, toggleLang, toast, storageError } = useApp();
+  const { t, lang, toggleLang, toast, storageError, theme, toggleTheme } =
+    useApp();
   const location = useLocation();
   const [menu, setMenu] = useState(false),
     [installHelp, setInstallHelp] = useState(false),
@@ -121,6 +124,23 @@ export default function App() {
             ))}
           </nav>
           <div className="header-actions">
+            <button
+              className="theme-button icon-button"
+              onClick={toggleTheme}
+              aria-pressed={theme === "dark"}
+              aria-label={
+                theme === "dark"
+                  ? t("تفعيل الوضع الفاتح", "Use light mode")
+                  : t("تفعيل الوضع الداكن", "Use dark mode")
+              }
+              title={
+                theme === "dark"
+                  ? t("الوضع الفاتح", "Light mode")
+                  : t("الوضع الداكن", "Dark mode")
+              }
+            >
+              {theme === "dark" ? <Sun size={19} /> : <Moon size={18} />}
+            </button>
             <button
               className="lang-button"
               onClick={toggleLang}

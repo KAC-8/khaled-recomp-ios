@@ -7,12 +7,17 @@ import {
   RotateCcw,
   Timer,
   View,
+  Gauge,
+  Focus,
 } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { Modal, PageHeading } from "../components/UI";
 import { exercises, sessions } from "../lib/data";
 import type { ExerciseId } from "../lib/data";
 import { today, useApp } from "../lib/store";
+import { dayIndex, displayDate } from "../lib/calendar";
+import WeekPlanner from "../components/WeekPlanner";
+import FocusBalance from "../components/FocusBalance";
 const ExerciseScene = lazy(() => import("../components/ExerciseScene"));
 
 function RestTimer({ seconds }: { seconds: number }) {
@@ -62,23 +67,30 @@ function RestTimer({ seconds }: { seconds: number }) {
   );
 }
 export default function Train() {
-  const { t, pair, training, toggleExercise } = useApp();
+  const { t, pair, training, toggleExercise, selectedDate, weekPlan, lang } =
+    useApp();
   const reduced = useReducedMotion();
   const [selected, setSelected] = useState<ExerciseId>("pushup"),
     [playing, setPlaying] = useState(!reduced),
     [phase, setPhase] = useState(45),
-    [view, setView] = useState<"angle" | "side">("angle"),
+    [view, setView] = useState<"angle" | "side" | "front" | "back">("angle"),
+    [speed, setSpeed] = useState(1),
+    [highlight, setHighlight] = useState(true),
     [session, setSession] = useState("a"),
     [open, setOpen] = useState(false),
     [level, setLevel] = useState<"base" | "easier">("base");
   useEffect(() => {
     if (reduced) setPlaying(false);
   }, [reduced]);
+  useEffect(() => {
+    const id = weekPlan[String(dayIndex(selectedDate))];
+    if (id !== "rest") setSession(id);
+  }, [selectedDate, weekPlan]);
   const e = exercises.find((e) => e.id === selected)!;
   const plan = sessions.find((s) => s.id === session)!;
   const done =
-    training.find((s) => s.date === today() && s.session === session)?.done ||
-    [];
+    training.find((s) => s.date === selectedDate && s.session === session)
+      ?.done || [];
   return (
     <div className="page-container train-page">
       <PageHeading
@@ -97,6 +109,7 @@ export default function Train() {
           {t("ابدأ حصة", "Start a session")}
         </button>
       </PageHeading>
+      <WeekPlanner kind="train" />
       <div
         className="exercise-selector"
         aria-label={t("اختر حركة", "Choose a movement")}
@@ -143,6 +156,8 @@ export default function Train() {
               playing={playing}
               phase={phase}
               view={view}
+              speed={speed}
+              highlight={highlight}
             />
           </Suspense>
           <div className="stage-hint">
@@ -190,6 +205,45 @@ export default function Train() {
               "Illustrative movement study. Learn technique with a qualified coach.",
             )}
           </p>
+          <div className="studio-options">
+            <div
+              className="camera-options"
+              aria-label={t("زوايا العرض", "Camera angles")}
+            >
+              {(["angle", "front", "side", "back"] as const).map((angle, i) => (
+                <button
+                  key={angle}
+                  aria-pressed={view === angle}
+                  onClick={() => setView(angle)}
+                >
+                  {
+                    [
+                      t("مائل", "Angle"),
+                      t("أمامي", "Front"),
+                      t("جانبي", "Side"),
+                      t("خلفي", "Back"),
+                    ][i]
+                  }
+                </button>
+              ))}
+            </div>
+            <div className="studio-toggles">
+              <button
+                onClick={() => setSpeed((s) => (s === 1 ? 0.5 : 1))}
+                aria-label={t("سرعة الحركة", "Movement speed")}
+              >
+                <Gauge size={14} />
+                <span dir="ltr">{speed}×</span>
+              </button>
+              <button
+                onClick={() => setHighlight((s) => !s)}
+                aria-pressed={highlight}
+              >
+                <Focus size={14} />
+                {t("العضلات", "Muscles")}
+              </button>
+            </div>
+          </div>
         </section>
         <section className="movement-info" key={selected}>
           <span className="small-label">{pair(e.group)}</span>
@@ -257,6 +311,7 @@ export default function Train() {
           <p className="caution">{pair(e.caution)}</p>
         </section>
       </div>
+      <FocusBalance kind="train" />
       <div className="training-bottom">
         <div>
           <span className="small-label">
@@ -301,7 +356,7 @@ export default function Train() {
       </div>
       {open && (
         <Modal
-          title={t("حصّتك اليوم", "Your session today")}
+          title={`${t("حصّتك", "Your session")} · ${displayDate(selectedDate, lang)}`}
           onClose={() => setOpen(false)}
         >
           <div className="session-modal">
@@ -347,6 +402,7 @@ export default function Train() {
                     className={`check-button ${done.includes(id) ? "checked" : ""}`}
                     aria-label={`${t("إكمال", "Complete")} ${pair(x.name)}`}
                     aria-pressed={done.includes(id)}
+                    disabled={selectedDate > today()}
                     onClick={() => toggleExercise(session, id)}
                   >
                     {done.includes(id) ? <Check size={18} /> : null}
@@ -376,11 +432,15 @@ export default function Train() {
                 </div>
               );
             })}
-            <RestTimer key={session} seconds={90} />
+            <RestTimer key={selectedDate + session} seconds={90} />
             <p className="subtle">
               {t(
-                "الحفظ تلقائي بتاريخ اليوم. يمكنك العودة وإكمال الحصة لاحقًا.",
-                "Saved automatically for today. Come back and pick up where you left off.",
+                selectedDate > today()
+                  ? "يوم قادم: استعرض الخطة الآن، وسجّل الإنجاز في يومه."
+                  : "الحفظ تلقائي للتاريخ المحدد. يمكنك العودة وإكمال الحصة لاحقًا.",
+                selectedDate > today()
+                  ? "A future day: preview the plan now and log activity on the day."
+                  : "Saved automatically for the selected date. Return and pick up where you left off.",
               )}
             </p>
             <button className="button full" onClick={() => setOpen(false)}>

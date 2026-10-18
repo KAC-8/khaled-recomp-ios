@@ -8,6 +8,8 @@ import {
 import { Action, Eyebrow, PageHeading, Reveal } from "../components/UI";
 import { sources } from "../lib/data";
 import { useApp } from "../lib/store";
+import WeekPlanner from "../components/WeekPlanner";
+import FocusBalance from "../components/FocusBalance";
 
 export default function Approach() {
   const { t } = useApp();
@@ -50,6 +52,8 @@ export default function Approach() {
           "Keeping your strength matters. The way forward starts with supporting your body, especially while you’re growing.",
         )}
       />
+      <WeekPlanner kind="approach" />
+      <FocusBalance kind="approach" />
       <div className="approach-hero">
         <div>
           <Eyebrow>{t("التنشيف المحافظ", "A CONSERVATIVE APPROACH")}</Eyebrow>

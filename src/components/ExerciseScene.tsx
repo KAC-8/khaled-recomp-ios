@@ -14,7 +14,9 @@ const boneDirection = v(0, 0, 0),
 
 // Lofted contours give the mannequin anatomical volume rather than a line skeleton.
 function contour(profile: number[][], material: THREE.Material, depth = 1) {
-  const points = profile.map(([y, r]) => new THREE.Vector2(r, y));
+  const points = new THREE.SplineCurve(
+    profile.map(([y, r]) => new THREE.Vector2(r, y)),
+  ).getPoints(40);
   const geometry = new THREE.LatheGeometry(points, 36);
   geometry.scale(1, 1, depth);
   const mesh = new THREE.Mesh(geometry, material);
@@ -74,17 +76,29 @@ export default function ExerciseScene({
   playing,
   phase,
   view,
+  speed,
+  highlight,
 }: {
   exercise: ExerciseId;
   playing: boolean;
   phase: number;
-  view: "angle" | "side";
+  view: "angle" | "side" | "front" | "back";
+  speed: number;
+  highlight: boolean;
 }) {
   const mount = useRef<HTMLDivElement>(null);
-  const values = useRef({ exercise, playing, phase, view });
-  values.current = { exercise, playing, phase, view };
+  const { t, theme } = useApp();
+  const values = useRef({
+    exercise,
+    playing,
+    phase,
+    view,
+    speed,
+    highlight,
+    theme,
+  });
+  values.current = { exercise, playing, phase, view, speed, highlight, theme };
   const [failed, setFailed] = useState(false);
-  const { t } = useApp();
   useEffect(() => {
     const host = mount.current!;
     let renderer: THREE.WebGLRenderer;
@@ -124,7 +138,8 @@ export default function ExerciseScene({
     const env = pmrem.fromScene(room, 0.04);
     scene.environment = env.texture;
     room.dispose();
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x8b8b94, 1.2));
+    const ambient = new THREE.HemisphereLight(0xffffff, 0x8b8b94, 1.2);
+    scene.add(ambient);
     const key = new THREE.DirectionalLight(0xffffff, 3);
     key.position.set(3, 6, 3);
     key.castShadow = true;
@@ -153,10 +168,12 @@ export default function ExerciseScene({
     platform.position.y = 0.018;
     platform.receiveShadow = true;
     scene.add(platform);
-    const body = new THREE.MeshStandardMaterial({
-      color: 0x24272c,
-      roughness: 0.5,
-      metalness: 0.15,
+    const body = new THREE.MeshPhysicalMaterial({
+      color: 0x41464d,
+      roughness: 0.57,
+      metalness: 0.03,
+      clearcoat: 0.12,
+      clearcoatRoughness: 0.6,
     });
     const muscle = new THREE.MeshStandardMaterial({
       color: 0xd75a29,
@@ -194,14 +211,37 @@ export default function ExerciseScene({
       ellipsoid(torso, muscle, [-0.132, 0.44, 0.122], [0.132, 0.103, 0.052]),
       ellipsoid(torso, muscle, [0.132, 0.44, 0.122], [0.132, 0.103, 0.052]),
     ];
+    const abs: THREE.Mesh[] = [];
     for (let i = 0; i < 3; i++)
       for (const x of [-0.055, 0.055])
-        ellipsoid(
-          torso,
-          body,
-          [x, 0.18 + i * 0.067, 0.112],
-          [0.05, 0.034, 0.023],
+        abs.push(
+          ellipsoid(
+            torso,
+            body,
+            [x, 0.18 + i * 0.067, 0.112],
+            [0.05, 0.034, 0.023],
+          ),
         );
+    const lats: THREE.Mesh[] = [];
+    for (const side of [-1, 1]) {
+      const lat = ellipsoid(
+        torso,
+        body,
+        [side * 0.18, 0.34, -0.14],
+        [0.087, 0.157, 0.042],
+      );
+      lat.rotation.z = side * -0.18;
+      lats.push(lat);
+      ellipsoid(torso, body, [side * 0.113, 0.51, -0.095], [0.1, 0.072, 0.026]);
+      const oblique = ellipsoid(
+        torso,
+        body,
+        [side * 0.14, 0.2, 0.082],
+        [0.038, 0.105, 0.026],
+      );
+      oblique.rotation.z = side * -0.18;
+      ellipsoid(torso, body, [side * 0.13, 0.547, 0.09], [0.13, 0.025, 0.032]);
+    }
     ellipsoid(torso, body, [0, 0.62, 0], [0.084, 0.105, 0.077]);
     const head = new THREE.Group();
     head.position.set(0, 0.76, 0.003);
@@ -231,10 +271,18 @@ export default function ExerciseScene({
         body,
       );
       scene.add(shoulder);
+      shoulder.scale.set(1, 0.9, 0.91);
       shoulder.castShadow = true;
       const upper = segment(body, 0.112, 0.33),
         lower = segment(body, 0.086, 0.3);
       scene.add(upper, lower);
+      const bicep = ellipsoid(
+        new THREE.Group(),
+        body,
+        [0, 0.14, -0.067],
+        [0.064, 0.111, 0.043],
+      );
+      upper.add(bicep);
       const joint = new THREE.Mesh(
         new THREE.SphereGeometry(0.071, 20, 14),
         body,
@@ -263,6 +311,13 @@ export default function ExerciseScene({
         lower = segment(body, 0.115, 0.46),
         short = segment(fabric, 0.185, 0.2);
       scene.add(upper, lower, short);
+      const quad = ellipsoid(
+        new THREE.Group(),
+        body,
+        [side * 0.035, 0.22, -0.14],
+        [0.103, 0.17, 0.051],
+      );
+      upper.add(quad);
       const knee = new THREE.Mesh(
         new THREE.SphereGeometry(0.095, 20, 16),
         body,
@@ -272,7 +327,7 @@ export default function ExerciseScene({
       scene.add(foot);
       ellipsoid(foot, fabric, [0, 0.03, 0.055], [0.084, 0.065, 0.165]);
       ellipsoid(foot, sole, [0, -0.005, 0.065], [0.086, 0.025, 0.17]);
-      return { side, upper, lower, short, knee, foot };
+      return { side, upper, lower, short, knee, foot, quad };
     });
     const barGroup = new THREE.Group();
     scene.add(barGroup);
@@ -306,6 +361,7 @@ export default function ExerciseScene({
       last = performance.now(),
       oldExercise = "",
       oldView = "",
+      oldTheme = "",
       oldPhase = values.current.phase;
     const resize = new ResizeObserver(() => {
       const w = host.clientWidth,
@@ -331,27 +387,66 @@ export default function ExerciseScene({
       last = now;
       if (!visible || document.hidden) return;
       cursor = 0;
-      const { exercise, playing, phase, view } = values.current;
+      const { exercise, playing, phase, view, speed, highlight, theme } =
+        values.current;
+      if (theme !== oldTheme) {
+        const dark = theme === "dark",
+          color = dark ? 0x181a1e : 0xeeeeef;
+        renderer.setClearColor(color);
+        scene.fog!.color.setHex(color);
+        floor.material.color.setHex(dark ? 0x08090b : color);
+        platform.material.color.setHex(dark ? 0x14171c : 0xe1e1e3);
+        body.color.setHex(dark ? 0x555b65 : 0x41464d);
+        ambient.intensity = dark ? 0.85 : 1.2;
+        key.intensity = dark ? 3.6 : 3;
+        rim.intensity = dark ? 1.5 : 1.8;
+        oldTheme = theme;
+      }
       if (phase !== oldPhase) {
         time = Math.acos(1 - (2 * phase) / 100) / (Math.PI * 0.6);
         oldPhase = phase;
       }
-      if (playing) time += dt;
+      if (playing) time += dt * speed;
       const u = (1 - Math.cos(time * Math.PI * 0.6)) / 2;
       if (exercise !== oldExercise || view !== oldView) {
         const low = exercise === "pushup" || exercise === "hollow";
         controls.target.set(0, low ? 0.46 : 1.2, 0);
         camera.position.set(
-          view === "side" ? (low ? 3.7 : 4.7) : low ? 2.8 : 3.5,
+          view === "side"
+            ? low
+              ? 3.7
+              : 4.7
+            : view === "front" || view === "back"
+              ? 0
+              : low
+                ? 2.8
+                : 3.5,
           low ? 1.8 : 2.15,
-          view === "side" ? 0.25 : low ? 2.7 : 4.3,
+          view === "side"
+            ? 0.25
+            : view === "back"
+              ? low
+                ? -4.3
+                : -5.1
+              : view === "front"
+                ? low
+                  ? 4.3
+                  : 5.1
+                : low
+                  ? 2.7
+                  : 4.3,
         );
         controls.update();
         oldExercise = exercise;
         oldView = view;
       }
       barGroup.visible = exercise === "pullup";
-      for (const p of pecs) p.material = exercise === "pushup" ? muscle : body;
+      for (const p of pecs)
+        p.material = highlight && exercise === "pushup" ? muscle : body;
+      for (const p of abs)
+        p.material = highlight && exercise === "hollow" ? muscle : body;
+      for (const p of lats)
+        p.material = highlight && exercise === "pullup" ? muscle : body;
       let hip: V, neck: V;
       if (exercise === "pushup") {
         hip = pose(0, 0.28 + 0.2 * u, -0.2);
@@ -406,6 +501,7 @@ export default function ExerciseScene({
         }
       }
       for (const l of legs) {
+        l.quad.material = highlight && exercise === "squat" ? muscle : body;
         const start = pose(hip.x + l.side * 0.13, hip.y - 0.04, hip.z);
         let ankle: V, bend: V;
         if (exercise === "pushup") {
@@ -454,7 +550,16 @@ export default function ExerciseScene({
       scene.traverse((o) => {
         if (o instanceof THREE.Mesh) o.geometry.dispose();
       });
-      for (const m of [body, muscle, fabric, sole, metal]) m.dispose();
+      for (const m of [
+        body,
+        muscle,
+        fabric,
+        sole,
+        metal,
+        floor.material,
+        platform.material,
+      ])
+        m.dispose();
       env.dispose();
       pmrem.dispose();
       renderer.dispose();
