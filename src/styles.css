@@ -340,172 +340,6 @@ html[lang="ar"] .small-label {
 .not-found h1 {
   font-size: 42px;
 }
-.home-page {
-  max-width: 1536px;
-  margin: auto;
-  padding: 30px 56px 0;
-}
-.home-hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 640px;
-  gap: 34px;
-}
-.hero-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 55px 0 24px;
-  padding-inline-end: 35px;
-}
-.hero-copy .eyebrow {
-  margin-bottom: 30px;
-}
-.hero-copy h1 {
-  font-size: clamp(70px, 6.7vw, 110px);
-  line-height: 1.08;
-  font-weight: 600;
-  letter-spacing: -0.065em;
-  position: relative;
-}
-.orange-period {
-  color: var(--orange);
-  font-weight: 400;
-  font-size: 0.7em;
-  margin-inline-start: 0.1em;
-}
-.hero-description {
-  font-size: 15px;
-  color: var(--muted);
-  max-width: 410px;
-  margin-top: 28px;
-  line-height: 1.85;
-}
-.hero-buttons {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  margin-top: 32px;
-  flex-wrap: wrap;
-}
-.hero-note {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: auto;
-  padding-top: 55px;
-}
-.hero-note svg {
-  color: var(--ink);
-}
-html[lang="ar"] .hero-copy h1 {
-  font-size: clamp(72px, 7vw, 112px);
-  letter-spacing: -0.025em;
-  line-height: 1.35;
-  font-weight: 600;
-}
-html[lang="ar"] .hero-description {
-  font-size: 16px;
-  line-height: 1.95;
-}
-html[lang="ar"] .hero-copy .eyebrow {
-  margin-bottom: 15px;
-}
-.hero-image {
-  position: relative;
-  overflow: hidden;
-  min-height: 640px;
-  border-radius: 4px;
-  background: #2b2b2e;
-}
-.hero-image img {
-  position: absolute;
-  inset: 0;
-  object-position: 50% 33%;
-  filter: grayscale(1);
-  transition: transform 1.5s var(--ease);
-}
-.hero-image:hover img {
-  transform: scale(1.025);
-}
-.image-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.25),
-    transparent 30%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.72)
-  );
-}
-.hero-image-top {
-  position: absolute;
-  top: 27px;
-  left: 28px;
-  right: 28px;
-  display: flex;
-  justify-content: space-between;
-  color: #fff;
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  direction: ltr;
-}
-.image-caption {
-  position: absolute;
-  bottom: 36px;
-  left: 30px;
-  right: 30px;
-  color: #fff;
-}
-.image-caption > span {
-  font-size: 11px;
-  letter-spacing: 0.05em;
-}
-.image-caption > p {
-  font-size: 22px;
-  font-weight: 500;
-  margin-top: 9px;
-  max-width: 80%;
-  line-height: 1.6;
-}
-.round-arrow {
-  height: 49px;
-  width: 49px;
-  border: 1px solid #ffffff70;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 0;
-  inset-inline-end: 0;
-  display: grid;
-  place-items: center;
-  transition: background 0.25s;
-}
-.round-arrow:hover {
-  background: #ffffff35;
-}
-.principle-strip {
-  margin-top: 32px;
-  padding: 23px 0;
-  border-bottom: 1px solid var(--line);
-  border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 15px;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  font-weight: 500;
-}
-.strip-cross {
-  font-size: 16px;
-  color: #aaa;
-}
-.overview-section {
-  padding-top: 80px;
-}
 .section-intro {
   display: flex;
   justify-content: space-between;
@@ -524,122 +358,6 @@ html[lang="ar"] .hero-copy .eyebrow {
   color: var(--muted);
   font-size: 13px;
   max-width: 300px;
-}
-.path-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.path-card {
-  height: 350px;
-  position: relative;
-  overflow: hidden;
-  padding: 26px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-radius: 4px;
-  transition: transform 0.35s var(--ease);
-}
-.path-card:hover {
-  transform: translateY(-5px);
-}
-.path-card > div {
-  position: relative;
-  z-index: 1;
-}
-.card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 11px;
-}
-.card-top > span {
-  opacity: 0.55;
-}
-.path-card h3 {
-  font-size: 26px;
-  line-height: 1.4;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  margin-top: 7px;
-}
-.path-card p {
-  font-size: 12px;
-  line-height: 1.9;
-  margin-top: 12px;
-  max-width: 290px;
-  color: var(--muted);
-}
-.training-card {
-  background: #e8e8eb;
-}
-.mini-lines {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  position: absolute !important;
-  top: 50px;
-  left: 0;
-  right: 0;
-  height: 135px;
-  direction: ltr;
-  align-items: center;
-  transform: rotate(-22deg);
-  opacity: 0.8;
-}
-.mini-lines i {
-  display: block;
-  width: 21px;
-  background: #b6b6bb;
-  height: 75px;
-  transform: skewY(-15deg);
-}
-.mini-lines i:nth-child(2),
-.mini-lines i:nth-child(4) {
-  height: 105px;
-}
-.mini-lines i:nth-child(3) {
-  height: 130px;
-  background: var(--orange);
-}
-.food-card {
-  color: #fff;
-  background: #333;
-}
-.food-card img {
-  position: absolute;
-  inset: 0;
-  filter: brightness(0.6);
-  transition: transform 0.8s var(--ease);
-}
-.food-card:after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.85), transparent 70%);
-}
-.food-card:hover img {
-  transform: scale(1.06);
-}
-.food-card p,
-.food-card .small-label {
-  color: #eee;
-}
-.progress-card {
-  background: #202024;
-  color: #fff;
-}
-.progress-card .small-label,
-.progress-card p {
-  color: #c1c1c6;
-}
-.progress-art {
-  position: absolute;
-  inset-inline-end: 25px;
-  top: 50px;
-  color: #ff7440;
-  opacity: 0.75;
 }
 .daily-checkin {
   display: flex;
@@ -1109,103 +827,6 @@ html[lang="ar"] .page-heading p {
   font-size: 11px;
   color: var(--muted);
 }
-.approach-hero {
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  background: #ededf0;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.approach-hero > div:first-child {
-  padding: 56px 45px;
-}
-.approach-hero h2 {
-  font-size: 54px;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
-  font-weight: 500;
-  margin: 23px 0;
-}
-.approach-hero p {
-  font-size: 14px;
-  line-height: 2;
-  color: var(--muted);
-  max-width: 430px;
-  margin-bottom: 30px;
-}
-.approach-photo {
-  position: relative;
-  min-height: 490px;
-}
-.approach-photo img {
-  position: absolute;
-  inset: 0;
-  filter: grayscale(1);
-  object-position: 40% 40%;
-}
-.approach-photo:after {
-  position: absolute;
-  content: "";
-  inset: 0;
-  background: linear-gradient(0deg, #0009, transparent 45%);
-}
-.approach-photo > span {
-  position: absolute;
-  bottom: 30px;
-  inset-inline-start: 30px;
-  z-index: 1;
-  color: #fff;
-  font-size: 12px;
-}
-.approach-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 38px;
-  margin-top: 48px;
-}
-.approach-card > div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 25px;
-}
-.approach-card > div > span {
-  color: #888;
-  font-size: 10px;
-}
-.approach-card h3 {
-  font-size: 23px;
-  font-weight: 500;
-  margin: 23px 0 14px;
-  line-height: 1.5;
-  letter-spacing: -0.02em;
-}
-.approach-card p {
-  font-size: 13px;
-  color: var(--muted);
-}
-.care-note {
-  display: flex;
-  gap: 28px;
-  padding: 35px;
-  background: #ebebee;
-  border-radius: 4px;
-  margin-top: 45px;
-}
-.care-note > svg {
-  color: var(--accent-text);
-}
-.care-note h3 {
-  font-size: 21px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-.care-note p {
-  font-size: 13px;
-  color: var(--muted);
-  max-width: 1000px;
-}
 .sources {
   display: flex;
   align-items: center;
@@ -1226,185 +847,6 @@ html[lang="ar"] .page-heading p {
   gap: 8px;
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-.nutrition-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 50px;
-}
-.nutrition-visual {
-  min-height: 500px;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.nutrition-visual img {
-  position: absolute;
-  inset: 0;
-}
-.nutrition-visual:after {
-  position: absolute;
-  content: "";
-  inset: 0;
-  background: linear-gradient(0deg, #000b, transparent 80%);
-}
-.nutrition-visual > div {
-  position: absolute;
-  bottom: 35px;
-  inset-inline-start: 35px;
-  z-index: 1;
-  color: #fff;
-}
-.nutrition-visual h2 {
-  font-size: 43px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.25;
-  margin-top: 15px;
-}
-.meal-plan {
-  padding: 15px 0;
-}
-.meal-tabs {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--line);
-  gap: 4px;
-  margin-top: 25px;
-}
-.meal-tabs > button {
-  position: relative;
-  font-size: 12px;
-  padding: 15px 10px;
-  color: var(--muted);
-  min-height: 50px;
-}
-.meal-tabs > button[aria-selected="true"] {
-  color: var(--ink);
-}
-.meal-tabs > button[aria-selected="true"]:after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--orange);
-}
-.meal-content {
-  padding-top: 36px;
-  animation: appear 0.4s var(--ease);
-}
-.meal-content > svg {
-  color: var(--accent-text);
-}
-.meal-content h2 {
-  font-size: 28px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 1.5;
-  margin: 20px 0;
-}
-.meal-content ul {
-  margin: 25px 0;
-  padding: 0;
-  list-style: none;
-}
-.meal-content li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  margin: 17px 0;
-}
-.meal-content li > svg {
-  color: #707078;
-}
-.meal-content > p {
-  font-size: 13px;
-  color: var(--muted);
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.habit-section {
-  margin-top: 60px;
-  border-block: 1px solid var(--line);
-  padding: 38px 0;
-}
-.habit-count {
-  font-size: 24px;
-  letter-spacing: -0.04em;
-  color: var(--muted);
-  font-family: Arial, sans-serif;
-}
-.habit-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-}
-.habit {
-  border: 1px solid var(--line);
-  background: #fff;
-  min-height: 135px;
-  padding: 22px;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 20px;
-  text-align: start;
-  border-radius: 4px;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
-}
-.habit > span:not(.habit-check) {
-  font-size: 12px;
-}
-.habit:hover {
-  border-color: #777;
-}
-.habit.is-done {
-  background: #ececee;
-  border-color: #777;
-}
-.habit-check {
-  position: absolute;
-  top: 22px;
-  inset-inline-end: 20px;
-  width: 22px;
-  height: 22px;
-  border: 1px solid #b4b4ba;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-}
-.is-done .habit-check {
-  color: #fff;
-  background: var(--ink);
-  border-color: var(--ink);
-}
-.habit-section > .subtle {
-  margin-top: 20px;
-}
-.nutrition-basics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  margin-top: 45px;
-}
-.nutrition-basics > article > span {
-  color: #898990;
-  font-size: 11px;
-}
-.nutrition-basics h3 {
-  font-size: 20px;
-  font-weight: 500;
-  margin: 15px 0 12px;
-}
-.nutrition-basics p {
-  color: var(--muted);
-  font-size: 13px;
 }
 .metrics-grid {
   display: grid;
@@ -2136,15 +1578,6 @@ html[lang="ar"] .page-heading p {
   .footer {
     max-width: 1424px;
   }
-  .hero-copy {
-    padding-inline-end: 60px;
-  }
-  .home-hero {
-    min-height: 700px;
-  }
-  .hero-image {
-    min-height: 700px;
-  }
 }
 @media (max-width: 1535px) {
   .footer {
@@ -2173,33 +1606,6 @@ html[lang="ar"] .page-heading p {
   .brand svg {
     width: 26px;
   }
-  .home-page {
-    padding-inline: 35px;
-  }
-  .hero-copy {
-    padding-inline-end: 10px;
-  }
-  .hero-copy h1 {
-    font-size: 75px;
-  }
-  .hero-description {
-    font-size: 14px;
-  }
-  .hero-buttons {
-    gap: 14px;
-  }
-  .hero-buttons .button {
-    font-size: 12px;
-    padding-inline: 19px;
-    gap: 14px;
-  }
-  .hero-buttons .text-link {
-    font-size: 11px;
-  }
-  .home-hero,
-  .hero-image {
-    min-height: 590px;
-  }
   .page-container {
     padding-inline: 35px;
   }
@@ -2218,13 +1624,6 @@ html[lang="ar"] .page-heading p {
   .training-bottom {
     gap: 40px;
   }
-  .path-card {
-    padding: 24px;
-    height: 340px;
-  }
-  .path-card h3 {
-    font-size: 23px;
-  }
   .daily-checkin {
     gap: 30px;
   }
@@ -2234,19 +1633,6 @@ html[lang="ar"] .page-heading p {
   }
   .footer {
     margin-inline: 35px;
-  }
-  .approach-hero > div:first-child {
-    padding: 40px 30px;
-  }
-  .approach-hero h2 {
-    font-size: 44px;
-  }
-  .nutrition-layout {
-    gap: 30px;
-  }
-  .meal-tabs > button {
-    font-size: 11px;
-    padding-inline: 6px;
   }
   .metrics-grid {
     gap: 12px;
@@ -2281,69 +1667,6 @@ html[lang="ar"] .page-heading p {
   }
   .header-actions {
     gap: 7px;
-  }
-  .home-page {
-    padding-inline: 25px;
-  }
-  .home-hero {
-    gap: 20px;
-  }
-  .hero-copy {
-    padding-top: 35px;
-  }
-  .hero-copy h1 {
-    font-size: 65px;
-  }
-  html[lang="ar"] .hero-copy h1 {
-    font-size: 68px;
-  }
-  .hero-description,
-  html[lang="ar"] .hero-description {
-    font-size: 14px;
-  }
-  .hero-buttons {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .home-hero,
-  .hero-image {
-    min-height: 570px;
-  }
-  .hero-copy .eyebrow {
-    font-size: 9px;
-  }
-  html[lang="ar"] .hero-copy .eyebrow {
-    font-size: 10px;
-  }
-  .hero-image-top {
-    left: 20px;
-    right: 20px;
-  }
-  .image-caption {
-    left: 20px;
-    right: 20px;
-    bottom: 25px;
-  }
-  .image-caption > p {
-    font-size: 18px;
-    max-width: 75%;
-  }
-  .path-grid {
-    gap: 13px;
-  }
-  .path-card {
-    padding: 20px;
-    height: 330px;
-  }
-  .path-card h3 {
-    font-size: 20px;
-  }
-  .path-card p {
-    font-size: 11px;
-  }
-  .path-card .small-label {
-    font-size: 9px;
   }
   .page-container {
     padding-inline: 25px;
@@ -2383,35 +1706,6 @@ html[lang="ar"] .page-heading p {
   }
   .training-bottom h2 {
     font-size: 26px;
-  }
-  .nutrition-layout {
-    gap: 25px;
-  }
-  .nutrition-visual {
-    min-height: 490px;
-  }
-  .nutrition-visual h2 {
-    font-size: 36px;
-  }
-  .meal-content h2 {
-    font-size: 25px;
-  }
-  .meal-content li {
-    font-size: 12px;
-  }
-  .meal-content > p {
-    font-size: 12px;
-  }
-  .habit {
-    padding: 18px;
-  }
-  .habit-check {
-    inset-inline-end: 15px;
-    top: 18px;
-  }
-  .habit > span:not(.habit-check) {
-    font-size: 11px;
-    max-width: 140px;
   }
   .metric-card {
     padding: 18px;
@@ -2553,110 +1847,6 @@ html[lang="ar"] .page-heading p {
   html[lang="ar"] .bottom-nav > a {
     font-size: 9px;
   }
-  .home-page {
-    padding: 21px 22px 0;
-  }
-  .home-hero {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    min-height: 0;
-  }
-  .hero-copy {
-    padding: 25px 0 0;
-    min-height: 0;
-  }
-  .hero-copy .eyebrow {
-    font-size: 9px;
-    margin-bottom: 20px;
-  }
-  html[lang="ar"] .hero-copy .eyebrow {
-    font-size: 11px;
-    margin-bottom: 13px;
-  }
-  .hero-copy h1 {
-    font-size: 68px;
-    line-height: 1.06;
-    letter-spacing: -0.06em;
-  }
-  html[lang="ar"] .hero-copy h1 {
-    font-size: 76px;
-    line-height: 1.23;
-    letter-spacing: -0.025em;
-  }
-  .hero-description,
-  html[lang="ar"] .hero-description {
-    font-size: 13px;
-    line-height: 1.95;
-    margin-top: 22px;
-    max-width: 440px;
-  }
-  .hero-buttons {
-    flex-direction: row;
-    align-items: center;
-    gap: 17px;
-    margin-top: 24px;
-    flex-wrap: wrap;
-  }
-  .hero-buttons .button {
-    min-height: 51px;
-    font-size: 12px;
-    gap: 15px;
-    padding: 14px 19px;
-  }
-  .hero-buttons .text-link {
-    font-size: 11px;
-    gap: 6px;
-  }
-  .hero-note {
-    margin-top: 23px;
-    padding-top: 0;
-    font-size: 10px;
-  }
-  .hero-note svg {
-    width: 16px;
-  }
-  .hero-image {
-    min-height: 445px;
-  }
-  .hero-image img {
-    object-position: 50% 30%;
-  }
-  .hero-image-top {
-    top: 23px;
-    font-size: 8px;
-  }
-  .image-caption {
-    bottom: 25px;
-    left: 23px;
-    right: 23px;
-  }
-  .image-caption > span {
-    font-size: 10px;
-  }
-  .image-caption > p {
-    font-size: 20px;
-  }
-  .round-arrow {
-    width: 43px;
-    height: 43px;
-  }
-  .principle-strip {
-    margin-top: 25px;
-    font-size: 8px;
-    letter-spacing: 0.03em;
-    padding: 20px 0;
-    gap: 9px;
-  }
-  .principle-strip .strip-cross {
-    font-size: 12px;
-  }
-  html[lang="ar"] .principle-strip {
-    font-size: 9px;
-    letter-spacing: 0;
-  }
-  .overview-section {
-    padding-top: 45px;
-  }
   .section-intro {
     flex-direction: column;
     align-items: flex-start;
@@ -2671,37 +1861,6 @@ html[lang="ar"] .page-heading p {
   .section-intro > p {
     font-size: 12px;
     max-width: 370px;
-  }
-  .path-grid {
-    grid-template-columns: 1fr;
-    gap: 17px;
-  }
-  .path-card {
-    height: 280px;
-    padding: 24px;
-  }
-  .path-card h3 {
-    font-size: 28px;
-  }
-  .path-card p {
-    font-size: 12px;
-    max-width: 280px;
-  }
-  .path-card .small-label {
-    font-size: 10px;
-  }
-  .mini-lines {
-    inset-inline-start: 43%;
-    top: 45px;
-    height: 130px;
-    opacity: 0.55;
-  }
-  .training-card .mini-lines {
-    width: 180px;
-  }
-  .progress-art {
-    inset-inline-end: 35px;
-    top: 45px;
   }
   .daily-checkin {
     margin-top: 40px;
@@ -2927,149 +2086,11 @@ html[lang="ar"] .page-heading p {
     height: 44px;
     font-size: 21px;
   }
-  .approach-hero {
-    grid-template-columns: 1fr;
-  }
-  .approach-hero > div:first-child {
-    padding: 30px 25px;
-  }
-  .approach-hero h2 {
-    font-size: 42px;
-    line-height: 1.35;
-    margin: 18px 0;
-  }
-  .approach-hero p {
-    font-size: 13px;
-  }
-  .approach-hero .button {
-    font-size: 12px;
-    min-height: 49px;
-  }
-  .approach-photo {
-    min-height: 360px;
-  }
-  .approach-photo img {
-    object-position: 50% 35%;
-  }
-  .approach-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-top: 35px;
-  }
-  .approach-card > div {
-    padding-bottom: 18px;
-  }
-  .approach-card h3 {
-    font-size: 23px;
-    margin: 18px 0 12px;
-  }
-  .approach-card p {
-    font-size: 13px;
-  }
-  .care-note {
-    padding: 24px 20px;
-    gap: 15px;
-    margin-top: 30px;
-  }
-  .care-note > svg {
-    width: 23px;
-  }
-  .care-note h3 {
-    font-size: 20px;
-  }
-  .care-note p {
-    font-size: 12px;
-  }
   .sources {
     gap: 18px;
     flex-direction: column;
     align-items: flex-start;
     margin-top: 27px;
-  }
-  .nutrition-layout {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-  .nutrition-visual {
-    min-height: 350px;
-  }
-  .nutrition-visual > div {
-    bottom: 28px;
-    inset-inline-start: 25px;
-  }
-  .nutrition-visual h2 {
-    font-size: 37px;
-    line-height: 1.3;
-  }
-  .meal-plan {
-    padding: 0;
-  }
-  .meal-tabs {
-    margin-top: 20px;
-  }
-  .meal-tabs > button {
-    font-size: 11px;
-    padding-inline: 8px;
-  }
-  .meal-content {
-    padding-top: 25px;
-  }
-  .meal-content h2 {
-    font-size: 27px;
-    margin-top: 18px;
-  }
-  .meal-content li {
-    font-size: 13px;
-    gap: 13px;
-  }
-  .meal-content > p {
-    font-size: 12px;
-  }
-  .habit-section {
-    margin-top: 35px;
-    padding: 28px 0;
-  }
-  .habit-section .section-intro {
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-  }
-  .habit-section .section-intro h2 {
-    font-size: 24px;
-  }
-  .habit-count {
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  .habit-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .habit {
-    min-height: 135px;
-    padding: 21px 18px;
-    gap: 22px;
-  }
-  .habit > span:not(.habit-check) {
-    font-size: 11px;
-  }
-  .habit-check {
-    inset-inline-end: 16px;
-    top: 21px;
-    width: 19px;
-    height: 19px;
-  }
-  .nutrition-basics {
-    grid-template-columns: 1fr;
-    gap: 27px;
-    margin-top: 30px;
-  }
-  .nutrition-basics h3 {
-    font-size: 21px;
-    margin: 12px 0 10px;
-  }
-  .nutrition-basics p {
-    font-size: 12px;
   }
   .metrics-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3307,32 +2328,8 @@ html[lang="ar"] .page-heading p {
   .header-inner {
     padding-inline: 17px;
   }
-  .home-page,
   .page-container {
     padding-inline: 18px;
-  }
-  .hero-copy h1 {
-    font-size: 62px;
-  }
-  html[lang="ar"] .hero-copy h1 {
-    font-size: 69px;
-  }
-  .hero-buttons {
-    gap: 11px;
-  }
-  .hero-buttons .button {
-    padding-inline: 15px;
-    gap: 11px;
-  }
-  .hero-buttons .text-link {
-    font-size: 10px;
-  }
-  .principle-strip {
-    font-size: 7px;
-    gap: 5px;
-  }
-  html[lang="ar"] .principle-strip {
-    font-size: 8px;
   }
   .page-heading h1 {
     font-size: 37px;
@@ -3369,16 +2366,11 @@ html[lang="ar"] .page-heading p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-.hero-image img {
-  object-position: 50% 0%;
-}
 .exercise-selector > button > span {
   opacity: 1;
   color: #686870;
 }
-.technique li > span,
-.approach-card > div > span,
-.nutrition-basics > article > span {
+.technique li > span {
   color: #686870;
 }
 html[lang="ar"] .desktop-nav {
@@ -3404,9 +2396,6 @@ html[lang="ar"] .exercise-stats strong {
     animation: none !important;
     transition: none !important;
   }
-  .hero-image:hover img,
-  .food-card:hover img,
-  .path-card:hover,
   .button:hover {
     transform: none;
   }

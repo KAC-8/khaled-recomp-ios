@@ -49,8 +49,7 @@ body {
 .button,
 .play-button,
 .check-button.checked,
-.energy-field label.selected > span,
-.is-done .habit-check {
+.energy-field label.selected > span {
   background: var(--solid);
   color: var(--on-solid);
   border-color: var(--solid);
@@ -94,22 +93,17 @@ body {
   border-color: var(--line);
 }
 .metric-card,
-.chart-panel,
-.habit {
+.chart-panel {
   background: var(--surface);
 }
-.training-card,
 .session-metric,
 .rest-timer {
   background: var(--panel-strong);
 }
-.approach-hero,
-.care-note,
 .history-table th,
 .level-toggle > button.active,
 .session-tabs > button.active,
 .period-tabs > button.active,
-.habit.is-done,
 .exercise-selector > button.selected {
   background: var(--panel);
 }
@@ -120,9 +114,7 @@ body {
   background: var(--panel-strong);
 }
 .exercise-selector > button > span,
-.technique li > span,
-.approach-card > div > span,
-.nutrition-basics > article > span {
+.technique li > span {
   color: var(--dim);
 }
 .movement-stage,
@@ -178,14 +170,6 @@ body {
 .caution {
   color: var(--accent-text);
 }
-.card-top > span {
-  opacity: 1;
-  color: var(--muted);
-}
-.food-card .card-top > span,
-.progress-card .card-top > span {
-  color: #ddd;
-}
 .mobile-menu,
 .modal-header {
   background: var(--bg);
@@ -212,18 +196,6 @@ html[data-theme="dark"] .form-error {
 }
 html[data-theme="dark"] .delete-confirm {
   color: #ffac9b;
-}
-html[data-theme="dark"] .progress-card {
-  border: 1px solid var(--line);
-}
-html[data-theme="dark"] .mini-lines i {
-  background: #555b65;
-}
-html[data-theme="dark"] .mini-lines i:nth-child(3) {
-  background: var(--orange);
-}
-.home-week {
-  margin-top: 35px;
 }
 .week-planner {
   border: 1px solid var(--line);
@@ -359,79 +331,6 @@ html[dir="ltr"] .week-actions > .icon-button svg {
   background: var(--panel);
   border-color: var(--line-strong);
 }
-.day-brief {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr auto;
-  align-items: center;
-  gap: 25px;
-  margin-top: 21px;
-  padding: 21px 0;
-  border-top: 1px solid var(--line);
-}
-.day-brief-title h2 {
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.5;
-  margin-top: 7px;
-}
-.day-brief-title p {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.9;
-  margin-top: 7px;
-  max-width: 500px;
-}
-.day-brief-details {
-  display: flex;
-  gap: 28px;
-  border-inline-start: 1px solid var(--line);
-  padding-inline-start: 24px;
-}
-.day-brief-details > span {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  font-size: 10px;
-  color: var(--muted);
-}
-.day-brief-details > span > strong {
-  font-family: Arial, sans-serif;
-  font-size: 27px;
-  color: var(--ink);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-}
-.day-brief-details small {
-  font-size: 12px;
-  margin-inline-start: 5px;
-  color: var(--muted);
-}
-.day-brief-details > a {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  position: relative;
-  padding-inline-end: 16px;
-  font-size: 10px;
-}
-.day-brief-details > a > span {
-  color: var(--muted);
-}
-.day-brief-details > a > strong {
-  font-weight: 500;
-  font-size: 11px;
-  line-height: 1.8;
-}
-.day-brief-details > a > svg {
-  transform: rotate(-90deg);
-  position: absolute;
-  inset-inline-end: 0;
-  top: 0;
-}
-html[dir="rtl"] .day-brief-details > a > svg {
-  transform: rotate(90deg);
-}
 .week-edit {
   display: flex;
   align-items: center;
@@ -472,97 +371,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
 }
 .week-edit-form > .button {
   margin-top: 12px;
-}
-.focus-balance {
-  margin: 34px 0 40px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--surface);
-}
-.balance-heading {
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 25px;
-}
-.balance-heading p {
-  font-size: 11px;
-  color: var(--muted);
-  line-height: 1.8;
-  max-width: 440px;
-}
-.balance-columns {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr;
-}
-.balance-columns > article {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  padding: 27px 25px;
-}
-.balance-flex {
-  border-inline-start: 1px solid var(--line);
-  background: var(--panel);
-}
-.balance-number {
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 58px;
-  font-weight: 400;
-  letter-spacing: -0.07em;
-  flex-shrink: 0;
-  line-height: 1.1;
-}
-.balance-number > small {
-  font-size: 19px;
-  letter-spacing: -0.03em;
-  margin-inline-start: 4px;
-}
-.balance-core .balance-number {
-  color: var(--accent-text);
-}
-.balance-columns h3 {
-  font-size: 17px;
-  line-height: 1.6;
-  font-weight: 500;
-  margin-bottom: 9px;
-}
-.balance-columns p {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.9;
-}
-.daily-meal-ideas {
-  padding: 26px 28px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
-}
-.daily-meal-ideas > div {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 25px;
-  margin: 22px 0;
-}
-.daily-meal-ideas article {
-  border-inline-start: 1px solid var(--line);
-  padding-inline-start: 23px;
-}
-.daily-meal-ideas article:first-child {
-  border: 0;
-  padding: 0;
-}
-.daily-meal-ideas article > span {
-  font-size: 11px;
-  color: var(--muted);
-}
-.daily-meal-ideas article > p {
-  font-size: 16px;
-  line-height: 1.8;
-  margin-top: 9px;
 }
 .daily-reflection {
   display: flex;
@@ -660,27 +468,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
   .brand {
     font-size: 13px;
   }
-  .day-brief {
-    gap: 18px;
-    grid-template-columns: 1.2fr 1fr auto;
-  }
-  .day-brief-title h2 {
-    font-size: 18px;
-  }
-  .day-brief-details {
-    padding-inline-start: 18px;
-    gap: 20px;
-  }
-  .balance-columns > article {
-    gap: 17px;
-    padding: 23px 21px;
-  }
-  .balance-number {
-    font-size: 49px;
-  }
-  .balance-columns h3 {
-    font-size: 16px;
-  }
   .studio-options {
     flex-direction: column;
     gap: 8px;
@@ -717,19 +504,11 @@ html[dir="rtl"] .day-brief-details > a > svg {
   .week-caption > span {
     font-size: 9px;
   }
-  .day-brief {
-    grid-template-columns: 1.5fr 1fr;
-    gap: 15px;
-  }
   .week-edit {
     grid-column: 1/-1;
     justify-self: end;
     min-height: 28px;
     margin-top: -4px;
-  }
-  .day-brief-details {
-    gap: 18px;
-    padding-inline-start: 20px;
   }
   .week-day {
     min-height: 98px;
@@ -737,19 +516,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
   }
   .week-day > strong {
     font-size: 23px;
-  }
-  .balance-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .balance-columns > article {
-    align-items: flex-start;
-    gap: 15px;
-    flex-direction: column;
-  }
-  .balance-number {
-    font-size: 46px;
   }
   .daily-reflection h2 {
     font-size: 22px;
@@ -777,9 +543,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
   }
   .brand {
     font-size: 13px;
-  }
-  .home-week {
-    margin-top: 28px;
   }
   .week-planner {
     padding: 17px 12px 0;
@@ -854,55 +617,10 @@ html[dir="rtl"] .day-brief-details > a > svg {
     bottom: 4px;
     inset-inline-end: 3px;
   }
-  .day-brief {
-    grid-template-columns: 1fr;
-    gap: 16px;
-    margin-top: 17px;
-    padding: 17px 2px;
-  }
-  .day-brief-title .small-label {
-    font-size: 9px;
-  }
-  .day-brief-title h2 {
-    font-size: 18px;
-    margin-top: 6px;
-  }
-  .day-brief-title p {
-    font-size: 11px;
-    margin-top: 7px;
-  }
-  .day-brief-details {
-    border-inline-start: 0;
-    padding-inline-start: 0;
-    gap: 24px;
-    justify-content: flex-start;
-  }
-  .day-brief-details > span {
-    font-size: 9px;
-    gap: 4px;
-  }
-  .day-brief-details > span > strong {
-    font-size: 22px;
-  }
-  .day-brief-details > a {
-    flex: 1;
-    gap: 5px;
-  }
-  .day-brief-details > a > span {
-    font-size: 9px;
-  }
-  .day-brief-details > a > strong {
-    font-size: 10px;
-  }
   .week-edit {
     grid-column: auto;
     font-size: 9px;
     min-height: 27px;
-  }
-  .week-train .day-brief-details,
-  .week-approach .day-brief-details,
-  .week-nutrition .day-brief-details {
-    display: none;
   }
   .week-edit-form {
     padding: 22px 20px;
@@ -920,74 +638,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
     font-size: 11px;
     padding: 11px 9px;
     min-height: 45px;
-  }
-  .balance-heading {
-    padding: 18px;
-    gap: 9px;
-  }
-  .balance-heading p {
-    font-size: 10px;
-  }
-  .balance-heading .small-label {
-    font-size: 10px;
-  }
-  .focus-balance {
-    margin: 27px 0 30px;
-    border-radius: 7px;
-  }
-  .balance-columns {
-    grid-template-columns: 1fr;
-  }
-  .balance-columns > article {
-    align-items: flex-start;
-    flex-direction: row;
-    padding: 22px 18px;
-    gap: 19px;
-  }
-  .balance-number {
-    font-size: 43px;
-    min-width: 75px;
-  }
-  .balance-number > small {
-    font-size: 14px;
-  }
-  .balance-columns h3 {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 8px;
-  }
-  .balance-columns p {
-    font-size: 11px;
-  }
-  .balance-flex {
-    border-inline-start: 0;
-    border-top: 1px solid var(--line);
-  }
-  .daily-meal-ideas {
-    padding: 20px;
-  }
-  .daily-meal-ideas > div {
-    grid-template-columns: 1fr;
-    gap: 17px;
-    margin: 19px 0;
-  }
-  .daily-meal-ideas article {
-    padding: 0 0 0 0;
-    border-inline-start: 0;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 17px;
-  }
-  .daily-meal-ideas article:first-child {
-    padding-bottom: 17px;
-    border-bottom: 1px solid var(--line);
-  }
-  .daily-meal-ideas article:last-child {
-    border: 0;
-    padding-bottom: 0;
-  }
-  .daily-meal-ideas article > p {
-    font-size: 16px;
-    margin-top: 5px;
   }
   .daily-reflection {
     display: grid;
@@ -1037,12 +687,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
     font-size: 10px;
     min-height: 35px;
   }
-  .day-brief .small-label {
-    letter-spacing: 0;
-  }
-  .home-week .week-caption > strong {
-    font-size: 9px;
-  }
 }
 @media (max-width: 375px) {
   .header-actions {
@@ -1072,13 +716,6 @@ html[dir="rtl"] .day-brief-details > a > svg {
   }
   .day-plan-tag {
     font-size: 7px;
-  }
-  .balance-columns > article {
-    gap: 14px;
-  }
-  .balance-number {
-    font-size: 40px;
-    min-width: 69px;
   }
   .week-today {
     padding-inline: 6px;

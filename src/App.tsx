@@ -1,10 +1,9 @@
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
   Activity,
   ArrowDownToLine,
   Check,
-  Compass,
   Dumbbell,
   Globe2,
   House,
@@ -21,7 +20,6 @@ import { useApp } from "./lib/store";
 import { Modal } from "./components/UI";
 import Home from "./pages/Home";
 const Train = lazy(() => import("./pages/Train"));
-const Approach = lazy(() => import("./pages/Approach"));
 const Nutrition = lazy(() => import("./pages/Nutrition"));
 const Progress = lazy(() => import("./pages/Progress"));
 interface InstallEvent extends Event {
@@ -43,11 +41,10 @@ export default function App() {
     updateServiceWorker,
   } = useRegisterSW();
   const nav = [
-    { to: "/", label: t("الرئيسية", "Overview"), icon: House },
-    { to: "/train", label: t("الكالستنكس", "Calisthenics"), icon: Dumbbell },
-    { to: "/approach", label: t("المنهج", "Approach"), icon: Compass },
-    { to: "/nutrition", label: t("التغذية", "Nutrition"), icon: Utensils },
-    { to: "/progress", label: t("التقدم", "Progress"), icon: Activity },
+    { to: "/", label: t("يومي", "Today"), icon: House },
+    { to: "/train", label: t("تمريني", "Train"), icon: Dumbbell },
+    { to: "/nutrition", label: t("أكلي", "Food"), icon: Utensils },
+    { to: "/progress", label: t("متابعتي", "Progress"), icon: Activity },
   ];
   useEffect(() => {
     setMenu(false);
@@ -220,7 +217,7 @@ export default function App() {
             <Routes location={location}>
               <Route path="/" element={<Home />} />
               <Route path="/train" element={<Train />} />
-              <Route path="/approach" element={<Approach />} />
+              <Route path="/approach" element={<Navigate to="/" replace />} />
               <Route path="/nutrition" element={<Nutrition />} />
               <Route path="/progress" element={<Progress />} />
               <Route
@@ -228,10 +225,7 @@ export default function App() {
                 element={
                   <div className="not-found">
                     <h1>
-                      {t(
-                        "هذه الصفحة أخذت استراحة.",
-                        "This page is taking a rest.",
-                      )}
+                      {t("الصفحة غير موجودة", "Page not found")}
                     </h1>
                     <Link className="button" to="/">
                       {t("العودة للرئيسية", "Back to overview")}
@@ -245,14 +239,8 @@ export default function App() {
       </AnimatePresence>
       <footer className="footer">
         <Link to="/" className="footer-brand" dir="ltr">
-          KHALID / CUT<span>MOVE WITH INTENT.</span>
+          KHALID / CUT
         </Link>
-        <p>
-          {t(
-            "قوّة تتطوّر. وعادات تدوم.",
-            "Strength that grows. Habits that last.",
-          )}
-        </p>
         <span>
           {t("بياناتك محفوظة على هذا الجهاز", "Your data stays on this device")}
           {offlineReady ? <Check size={13} /> : null}

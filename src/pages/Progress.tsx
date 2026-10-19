@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Activity,
   ArrowDownToLine,
@@ -15,7 +16,6 @@ import { Modal, PageHeading } from "../components/UI";
 import { today, useApp, validDate, validateBackup } from "../lib/store";
 import type { Log } from "../lib/store";
 import WeekPlanner from "../components/WeekPlanner";
-import FocusBalance from "../components/FocusBalance";
 import { weekDates } from "../lib/calendar";
 
 type Metric = "push" | "pull" | "hold" | "weight" | "waist" | "energy";
@@ -465,7 +465,6 @@ export default function Progress() {
     importData,
     notify,
     selectedDate,
-    habits,
   } = useApp();
   const [form, setForm] = useState<Log | null | false>(false),
     [metric, setMetric] = useState<Metric>("push"),
@@ -476,6 +475,13 @@ export default function Progress() {
     > | null>(null),
     [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useSearchParams();
+  useEffect(() => {
+    if (search.get("checkin") === "1") {
+      if (selectedDate <= today()) setForm(null);
+      setSearch({}, { replace: true });
+    }
+  }, [search, setSearch, selectedDate]);
   const labels: Record<Metric, string> = {
     push: t("الضغط", "Push-ups"),
     pull: t("العقلة", "Pull-ups"),
@@ -522,11 +528,11 @@ export default function Progress() {
   return (
     <div className="page-container">
       <PageHeading
-        eyebrow={t("التقدم / الصورة الكاملة", "PROGRESS / THE BIGGER PICTURE")}
-        title={t("راقب ما يهم.", "Measure what matters.")}
+        eyebrow={t("متابعتي", "MY PROGRESS")}
+        title={t("طاقتك وأداؤك.", "Your energy. Your performance.")}
         description={t(
-          "قوّتك، طاقتك، وإحساسك بالحركة. سجل شخصي يساعدك تفهم تقدّمك بدون ضغط.",
-          "Your strength, energy and how movement feels. A personal record to understand progress without pressure.",
+          "سجّل عندما تحتاج. وقارن أداءك مع الوقت.",
+          "Check in when you need to. Follow your performance over time.",
         )}
       >
         <button
@@ -652,7 +658,6 @@ export default function Progress() {
           </button>
         </div>
       </section>
-      <FocusBalance kind="progress" />
       <section className="history-section">
         <div className="section-intro">
           <div>
@@ -842,8 +847,8 @@ export default function Progress() {
             </h3>
             <p>
               {t(
-                "الاستعادة تستبدل السجل والحصص والعادات الحالية بالنسخة المختارة. احتفظ بنسخة من بياناتك الحالية أولًا.",
-                "Restoring replaces your current check-ins, sessions and habits with this backup. Keep a copy of your current data first.",
+                "الاستعادة تستبدل المتابعات والحصص والعادات واختيارات الوجبات. احتفظ بنسخة من بياناتك الحالية أولًا.",
+                "Restoring replaces check-ins, sessions, habits and meal choices. Keep a copy of your current data first.",
               )}
             </p>
             <button className="text-link" onClick={exportData}>

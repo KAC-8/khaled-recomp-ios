@@ -4,18 +4,14 @@ import {
   ArrowRight,
   CalendarDays,
   Check,
-  ChevronDown,
   Settings2,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { useApp, today } from "../lib/store";
 import {
   calendarDate,
   dayIndex,
   displayDate,
-  mealIdeas,
   planNames,
-  recoveryIdeas,
   shiftDate,
   weekDates,
   weekdays,
@@ -24,7 +20,7 @@ import type { PlanId } from "../lib/calendar";
 import { Modal } from "./UI";
 
 export type PlannerKind =
-  "overview" | "train" | "nutrition" | "approach" | "progress";
+  "overview" | "train" | "nutrition" | "progress";
 export default function WeekPlanner({
   kind = "overview",
 }: {
@@ -46,46 +42,17 @@ export default function WeekPlanner({
   const [edit, setEdit] = useState(false),
     [draft, setDraft] = useState(weekPlan);
   const days = weekDates(selectedDate),
-    day = dayIndex(selectedDate),
-    plan = weekPlan[String(day)],
     future = selectedDate > today();
   const dates = `${displayDate(days[0], lang)} — ${displayDate(days[6], lang)} · ${calendarDate(selectedDate).getFullYear()}`;
-  const done = training.filter(
-    (s) => s.date === selectedDate && s.done.length > 0,
-  ).length;
-  const habitCount = (habits[selectedDate] || []).length;
-  const log = logs.find((l) => l.date === selectedDate);
-  const title =
-    kind === "nutrition"
-      ? t("أفكار وجبات هذا اليوم", "Meal ideas for this day")
-      : kind === "approach"
-        ? t("تركيزك لهذا اليوم", "Your focus for this day")
-        : kind === "progress"
-          ? t("متابعة اليوم المحدد", "Your selected day")
-          : pair(planNames[plan]);
-  const body =
-    kind === "nutrition"
-      ? pair(mealIdeas[day].flex)
-      : kind === "progress"
-        ? log
-          ? t(
-              "لديك متابعة محفوظة لهذا التاريخ.",
-              "You have a check-in saved for this date.",
-            )
-          : t(
-              "لم تسجّل متابعة لهذا التاريخ بعد.",
-              "No check-in saved for this date yet.",
-            )
-        : pair(recoveryIdeas[day]);
+  const showPlan = kind === "train" || kind === "overview";
   return (
     <section
-      className={`week-planner week-${kind}`}
+      className={`week-planner compact-week week-${kind}`}
       aria-label={t("جدول الأسبوع", "Weekly planner")}
     >
       <div className="week-header">
         <div className="week-caption">
           <CalendarDays size={18} />
-          <span>{t("أسبوعك، بطريقتك", "YOUR WEEK. YOUR WAY.")}</span>
           <strong>{dates}</strong>
         </div>
         <div className="week-actions">
@@ -127,7 +94,7 @@ export default function WeekPlanner({
               data-date={date}
               onClick={() => setSelectedDate(date)}
               aria-pressed={active}
-              aria-label={`${displayDate(date, lang, true)} · ${pair(planNames[id])}${hasData ? ` · ${t("نشاط محفوظ", "Saved activity")}` : ""}`}
+              aria-label={`${displayDate(date, lang, true)}${showPlan ? ` · ${pair(planNames[id])}` : ""}${hasData ? ` · ${t("نشاط محفوظ", "Saved activity")}` : ""}`}
               aria-current={date === today() ? "date" : undefined}
             >
               <span>
@@ -136,13 +103,13 @@ export default function WeekPlanner({
                   : pair(weekdays[index])}
               </span>
               <strong>{calendarDate(date).getDate()}</strong>
-              <span className={`day-plan-tag ${id === "c" ? "is-flex" : ""}`}>
+              {showPlan && <span className={`day-plan-tag ${id === "c" ? "is-flex" : ""}`}>
                 {id === "rest"
                   ? t("تعافٍ", "Recover")
                   : id === "c"
                     ? t("مرن", "Flexible")
                     : t("أساس", "Core")}
-              </span>
+              </span>}
               <span className="day-data-dot" aria-hidden="true">
                 {hasData ? <Check size={10} /> : null}
               </span>
@@ -150,48 +117,12 @@ export default function WeekPlanner({
           );
         })}
       </div>
-      <div className="day-brief">
-        <div className="day-brief-title">
-          <span className="small-label">
+      <div className="selected-day-line">
+          <span>
             {displayDate(selectedDate, lang, true)}
             {future ? ` · ${t("تخطيط", "PLANNING")}` : ""}
           </span>
-          <h2>{title}</h2>
-          <p>{body}</p>
-        </div>
-        <div className="day-brief-details">
-          {kind === "overview" ? (
-            <>
-              <Link to="/train">
-                <span>{t("التدريب", "TRAIN")}</span>
-                <strong>{pair(planNames[plan])}</strong>
-                <ChevronDown size={14} />
-              </Link>
-              <Link to="/nutrition">
-                <span>{t("التغذية", "FUEL")}</span>
-                <strong>
-                  {t("وجباتك وعاداتك اليومية", "Your meals & daily habits")}
-                </strong>
-                <ChevronDown size={14} />
-              </Link>
-            </>
-          ) : (
-            <>
-              <span>
-                <strong>{done}</strong>
-                {t("حصص محفوظة", "sessions logged")}
-              </span>
-              <span>
-                <strong>
-                  {habitCount}
-                  <small>/ 4</small>
-                </strong>
-                {t("عادات مسجّلة", "habits checked")}
-              </span>
-            </>
-          )}
-        </div>
-        <button
+        {showPlan && <button
           className="week-edit"
           onClick={() => {
             setDraft({ ...weekPlan });
@@ -200,7 +131,7 @@ export default function WeekPlanner({
         >
           <Settings2 size={15} />
           <span>{t("عدّل أسبوعك", "Edit your week")}</span>
-        </button>
+        </button>}
       </div>
       {edit && (
         <Modal

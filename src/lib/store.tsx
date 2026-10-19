@@ -3,6 +3,8 @@ import type { ReactNode } from "react";
 import type { Lang, Pair } from "./data";
 import { defaultWeekPlan } from "./calendar";
 import type { WeekPlan } from "./calendar";
+import { mealSlots, validMealChoice, validPlanDate } from "./meals";
+import type { MealSelections, MealSlot } from "./meals";
 
 export interface Log {
   id: string;
@@ -27,6 +29,7 @@ interface Saved {
   habits: Record<string, string[]>;
   hideBody: boolean;
   weekPlan: WeekPlan;
+  mealSelections: MealSelections;
 }
 const KEY = "khalid-cut-v1";
 export function today() {
@@ -125,6 +128,20 @@ export function validateBackup(raw: unknown): Saved {
         habits[date] = values.filter((v) =>
           ["meals", "water", "sleep", "move"].includes(v),
         );
+  const mealSelections: MealSelections = {};
+  if (d.mealSelections !== undefined) {
+    if (!d.mealSelections || typeof d.mealSelections !== "object" || Array.isArray(d.mealSelections) || Object.keys(d.mealSelections).length > 10000)
+      throw Error("Invalid meal plans");
+    for (const [date, choices] of Object.entries(d.mealSelections)) {
+      if (!validPlanDate(date) || !choices || typeof choices !== "object" || Array.isArray(choices)) throw Error("Invalid meal plan");
+      const clean: Partial<Record<MealSlot, string>> = {};
+      for (const [slot, value] of Object.entries(choices)) {
+        if (!mealSlots.includes(slot as MealSlot) || !validMealChoice(slot as MealSlot, value)) throw Error("Invalid meal choice");
+        clean[slot as MealSlot] = value;
+      }
+      mealSelections[date] = clean;
+    }
+  }
   return {
     version: 1,
     logs: logs.sort((a, b) => a.date.localeCompare(b.date)),
@@ -132,6 +149,7 @@ export function validateBackup(raw: unknown): Saved {
       new Map(training.map((s) => [`${s.date}-${s.session}`, s])).values(),
     ),
     habits,
+    mealSelections,
     hideBody: !!d.hideBody,
     weekPlan: Object.fromEntries(
       Object.keys(defaultWeekPlan).map((day) => [
@@ -150,6 +168,7 @@ const empty: Saved = {
   habits: {},
   hideBody: false,
   weekPlan: defaultWeekPlan,
+  mealSelections: {},
 };
 function read(): Saved {
   try {
@@ -213,6 +232,7 @@ interface AppState extends Saved {
   selectedDate: string;
   setSelectedDate: (date: string) => void;
   setWeekPlan: (plan: WeekPlan) => void;
+  setMealChoice: (slot: MealSlot, value: string) => void;
   theme: "light" | "dark";
   toggleTheme: () => void;
   toggleBody: () => void;
@@ -276,6 +296,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectedDate,
     setSelectedDate,
     setWeekPlan: (plan) => setSaved((s) => ({ ...s, weekPlan: plan })),
+    setMealChoice: (slot, value) => setSaved((s) => {
+      if (!validPlanDate(selectedDate) || !mealSlots.includes(slot) || !validMealChoice(slot, value)) return s;
+      return {
+        ...s,
+        mealSelections: {
+          ...s.mealSelections,
+          [selectedDate]: { ...s.mealSelections[selectedDate], [slot]: value },
+        },
+      };
+    }),
     theme,
     toggleTheme: () => {
       const next = theme === "dark" ? "light" : "dark";

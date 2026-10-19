@@ -6,7 +6,6 @@ import {
   Play,
   RotateCcw,
   Timer,
-  View,
   Gauge,
   Focus,
 } from "lucide-react";
@@ -17,7 +16,6 @@ import type { ExerciseId } from "../lib/data";
 import { today, useApp } from "../lib/store";
 import { dayIndex, displayDate } from "../lib/calendar";
 import WeekPlanner from "../components/WeekPlanner";
-import FocusBalance from "../components/FocusBalance";
 const ExerciseScene = lazy(() => import("../components/ExerciseScene"));
 
 function RestTimer({ seconds }: { seconds: number }) {
@@ -94,22 +92,23 @@ export default function Train() {
   return (
     <div className="page-container train-page">
       <PageHeading
-        eyebrow={t(
-          "الكالستنكس / استوديو الحركة",
-          "CALISTHENICS / MOVEMENT STUDIO",
-        )}
-        title={t("أتقن الأساس.", "Master the fundamentals.")}
+        eyebrow={t("تمريني / الكالستنكس", "MY TRAINING / CALISTHENICS")}
+        title={t("افهم الحركة. وابدأ.", "See the move. Get started.")}
         description={t(
-          "تعرّف على الحركة من كل زاوية. ابدأ بالمستوى المناسب، ودع الجودة تقود التقدّم.",
-          "Explore movement from every angle. Start at your level. Let quality lead your progress.",
+          "حركات واضحة، حصة محفوظة، وراحة بين المجموعات.",
+          "Clear movements, a saved session and rest between sets.",
         )}
       >
         <button className="button" onClick={() => setOpen(true)}>
           <Play size={17} fill="currentColor" />
-          {t("ابدأ حصة", "Start a session")}
+          {weekPlan[String(dayIndex(selectedDate))] === "rest" || selectedDate > today()
+            ? t("استعرض حصة", "Preview a session") : t("ابدأ حصة", "Start a session")}
         </button>
       </PageHeading>
       <WeekPlanner kind="train" />
+      <p className="training-day-caption">{weekPlan[String(dayIndex(selectedDate))] === "rest"
+        ? t("يوم تعافٍ في جدولك. استعرض الحركات للتعلّم، ولا تحتاج حصة إضافية.", "A recovery day in your plan. Explore movements to learn; no extra session needed.")
+        : t("نسّق هذه الحصة مع تدريب النادي، وخذ راحة إذا كنت متعبًا.", "Coordinate this session with gym training, and rest if tired.")}</p>
       <div
         className="exercise-selector"
         aria-label={t("اختر حركة", "Choose a movement")}
@@ -186,18 +185,6 @@ export default function Train() {
                 setPhase(Number(event.target.value));
               }}
             />
-            <button
-              className={`view-button ${view === "side" ? "active" : ""}`}
-              aria-pressed={view === "side"}
-              onClick={() => setView((v) => (v === "angle" ? "side" : "angle"))}
-            >
-              <View size={17} />
-              <span>
-                {view === "angle"
-                  ? t("جانبي", "Side view")
-                  : t("مائل", "Angled")}
-              </span>
-            </button>
           </div>
           <p className="demo-note">
             {t(
@@ -205,6 +192,8 @@ export default function Train() {
               "Illustrative movement study. Learn technique with a qualified coach.",
             )}
           </p>
+          <details className="studio-settings">
+          <summary>{t("زوايا العرض والسرعة", "Camera & playback")}</summary>
           <div className="studio-options">
             <div
               className="camera-options"
@@ -244,6 +233,7 @@ export default function Train() {
               </button>
             </div>
           </div>
+          </details>
         </section>
         <section className="movement-info" key={selected}>
           <span className="small-label">{pair(e.group)}</span>
@@ -311,25 +301,8 @@ export default function Train() {
           <p className="caution">{pair(e.caution)}</p>
         </section>
       </div>
-      <FocusBalance kind="train" />
-      <div className="training-bottom">
-        <div>
-          <span className="small-label">
-            {t("تدريب يكمّل يومك", "TRAINING THAT FITS YOUR LIFE")}
-          </span>
-          <h2>
-            {t(
-              "اختر الحصة. واحترم تعافيك.",
-              "Choose a session. Respect recovery.",
-            )}
-          </h2>
-          <p>
-            {t(
-              "قوالب مرنة للتعلّم وليست جدولًا إضافيًا فوق النادي. اختر مع مدربك يومًا مناسبًا، واترك راحة بين الحصص المجهدة.",
-              "Flexible learning templates, not an extra schedule on top of gym training. Choose a suitable day with your coach and leave recovery between demanding sessions.",
-            )}
-          </p>
-        </div>
+      <details className="alternative-sessions">
+        <summary>{t("حصص بديلة", "Alternative sessions")}</summary>
         <div className="session-cards">
           {sessions.map((s, i) => (
             <button
@@ -353,7 +326,7 @@ export default function Train() {
             </button>
           ))}
         </div>
-      </div>
+      </details>
       {open && (
         <Modal
           title={`${t("حصّتك", "Your session")} · ${displayDate(selectedDate, lang)}`}

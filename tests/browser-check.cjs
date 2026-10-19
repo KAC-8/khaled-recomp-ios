@@ -1,4 +1,5 @@
 const { chromium, webkit } = require("playwright");
+const { staticPreview, staticMode, contextOptions, exportBackup } = require("./static-preview.cjs");
 const fs = require("fs"),
   assert = require("assert");
 const out = __dirname + "/../test-results",
@@ -22,11 +23,13 @@ const localDate = (offset = 0) => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 (async () => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, downloadsPath: __dirname + "/../test-results/downloads" });
   const context = await browser.newContext({
+    ...contextOptions,
     viewport: { width: 1440, height: 1000 },
     acceptDownloads: true,
   });
+  await staticPreview(context, base);
   const page = await context.newPage();
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(base);
@@ -35,7 +38,7 @@ const localDate = (offset = 0) => {
     assert.equal(await page.locator("html").getAttribute("dir"), "rtl");
     await page
       .locator(".desktop-nav")
-      .getByRole("link", { name: "الكالستنكس", exact: true })
+      .getByRole("link", { name: "تمريني", exact: true })
       .click();
     await page.waitForURL("**/train");
     await page.locator("canvas").waitFor();
@@ -47,7 +50,7 @@ const localDate = (offset = 0) => {
     assert.equal(await page.locator("html").getAttribute("dir"), "ltr");
     await page.reload();
     await page
-      .getByRole("heading", { name: "Master the fundamentals.", exact: true })
+      .getByRole("heading", { name: "See the move. Get started.", exact: true })
       .waitFor();
   })();
   await check("All four WebGL movement demos and controls", async () => {
@@ -79,8 +82,9 @@ const localDate = (offset = 0) => {
     const b = await page.locator("canvas").screenshot();
     assert(a.equals(b), "Paused scene should stay still");
     await page.getByRole("slider", { name: "Movement position" }).fill("85");
-    await page.getByRole("button", { name: "Side view", exact: true }).click();
-    await page.getByRole("button", { name: "Angled", exact: true }).waitFor();
+    await page.locator(".studio-settings > summary").click();
+    await page.locator(".camera-options").getByRole("button", { name: "Side", exact: true }).click();
+    assert.equal(await page.locator(".camera-options").getByRole("button", { name: "Side", exact: true }).getAttribute("aria-pressed"), "true");
     await page.waitForTimeout(500);
     await page.screenshot({
       path: out + "/studio-en-desktop.png",
@@ -91,7 +95,7 @@ const localDate = (offset = 0) => {
     "Session checklist, focus trap, timer and persistence",
     async () => {
       await page
-        .getByRole("button", { name: "Start a session", exact: true })
+        .getByRole("button", { name: /^(Start|Preview) a session$/ })
         .click();
       const dialog = page.getByRole("dialog");
       await dialog
@@ -129,7 +133,7 @@ const localDate = (offset = 0) => {
       await page.keyboard.press("Escape");
       await page.reload();
       await page
-        .getByRole("button", { name: "Start a session", exact: true })
+        .getByRole("button", { name: /^(Start|Preview) a session$/ })
         .click();
       await page
         .locator(".session-tabs")
@@ -145,21 +149,14 @@ const localDate = (offset = 0) => {
     },
   )();
   await check(
-    "Nutrition tabs, keyboard navigation and saved habits",
+    "Meal preparation, swapping and saved habits",
     async () => {
       await page.goto(base + "/nutrition");
-      await page.getByRole("tab", { name: "Lunch", exact: true }).click();
-      await page
-        .getByRole("heading", { name: "A balanced plate. Your way." })
-        .waitFor();
-      await page.getByRole("tab", { name: "Lunch", exact: true }).focus();
-      await page.keyboard.press("ArrowRight");
-      assert.equal(
-        await page
-          .getByRole("tab", { name: "Dinner", exact: true })
-          .getAttribute("aria-selected"),
-        "true",
-      );
+      await page.locator('[data-meal="lunch"] .meal-prep summary').click();
+      await page.locator('[data-meal="lunch"] .meal-prep p').waitFor();
+      await page.getByRole("button", { name: "Change Lunch", exact: true }).click();
+      await page.locator(".meal-options button").first().click();
+      await page.getByRole("dialog").waitFor({ state: "hidden" });
       await page
         .getByRole("button", { name: "Regular meals", exact: true })
         .click();
@@ -290,11 +287,8 @@ const localDate = (offset = 0) => {
   )();
   let saved;
   await check("Export, safe import preview and restore", async () => {
-    const downloadPromise = page.waitForEvent("download");
-    await page.getByRole("button", { name: "Export", exact: true }).click();
-    const download = await downloadPromise;
-    await download.saveAs(out + "/backup.json");
-    saved = JSON.parse(fs.readFileSync(out + "/backup.json", "utf8"));
+    saved = await exportBackup(page);
+    fs.writeFileSync(out + "/backup.json", JSON.stringify(saved));
     assert.equal(saved.logs.length, 2);
     await page.locator("input[type=file]").setInputFiles({
       name: "invalid.json",
@@ -327,7 +321,15 @@ const localDate = (offset = 0) => {
     await page.getByRole("dialog").waitFor({ state: "hidden" });
     assert.equal(await page.locator("tbody tr").count(), 2);
   })();
-  await check("PWA manifest, assets and offline deep routes", async () => {
+  await check(staticMode ? "PWA build assets (real offline test not run)" : "PWA manifest, assets and offline deep routes", async () => {
+    if (staticMode) {
+      const manifest = JSON.parse(fs.readFileSync(__dirname + "/../dist/manifest.webmanifest", "utf8"));
+      assert.equal(manifest.display, "standalone");
+      for (const icon of manifest.icons) assert(fs.existsSync(__dirname + "/../dist" + icon.src));
+      assert(fs.existsSync(__dirname + "/../dist/sw.js"));
+      console.log("NOTE static fixture: manifest and icons checked; real offline network test deferred");
+      return;
+    }
     await page.goto(base);
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
@@ -348,7 +350,7 @@ const localDate = (offset = 0) => {
     try {
       await page.goto(base + "/nutrition");
       await page
-        .getByRole("heading", { name: "Fuel your day.", exact: true })
+        .getByRole("heading", { name: "What’s on the menu?", exact: true })
         .waitFor();
       await page.goto(base + "/train");
       await page.locator("canvas").waitFor();
@@ -367,8 +369,7 @@ const localDate = (offset = 0) => {
           for (const route of [
             "/",
             "/train",
-            "/approach",
-            "/nutrition",
+                        "/nutrition",
             "/progress",
           ]) {
             await page.goto(base + route);
@@ -420,7 +421,8 @@ const localDate = (offset = 0) => {
   await check(
     "Legacy migration preserves measurements without inventing energy",
     async () => {
-      const legacy = await browser.newContext();
+      const legacy = await browser.newContext(contextOptions);
+      await staticPreview(legacy, base);
       const oldDate = localDate(-2);
       await legacy.addInitScript(
         ({ date }) => {
@@ -451,7 +453,8 @@ const localDate = (offset = 0) => {
   await check(
     "Blocked browser storage is reported and the app remains usable",
     async () => {
-      const restricted = await browser.newContext();
+      const restricted = await browser.newContext(contextOptions);
+      await staticPreview(restricted, base);
       await restricted.addInitScript(() =>
         Object.defineProperty(window, "localStorage", {
           get() {
@@ -472,9 +475,11 @@ const localDate = (offset = 0) => {
   )();
   await check("Reduced motion disables exercise autoplay", async () => {
     const reduced = await browser.newContext({
+      ...contextOptions,
       reducedMotion: "reduce",
       viewport: { width: 390, height: 844 },
     });
+    await staticPreview(reduced, base);
     const p = await reduced.newPage();
     await p.addInitScript(() => localStorage.setItem("kr-lang", "en"));
     await p.goto(base + "/train");
@@ -490,7 +495,7 @@ const localDate = (offset = 0) => {
     await reduced.close();
   })();
   await check(
-    "Accessibility audit on all five pages in Arabic and English",
+    "Accessibility audit on all four pages in Arabic and English",
     async () => {
       const axe = fs.readFileSync(
         require.resolve("axe-core/axe.min.js"),
@@ -503,8 +508,7 @@ const localDate = (offset = 0) => {
         for (const route of [
           "/",
           "/train",
-          "/approach",
-          "/nutrition",
+                    "/nutrition",
           "/progress",
         ]) {
           await page.goto(base + route);
@@ -541,16 +545,18 @@ const localDate = (offset = 0) => {
   await check("WebKit iPhone browser: navigation, saving and 3D", async () => {
     const safari = await webkit.launch({ headless: true, timeout: 20000 });
     const c = await safari.newContext({
+      ...contextOptions,
       viewport: { width: 390, height: 844 },
       isMobile: true,
       hasTouch: true,
       deviceScaleFactor: 2,
     });
+    await staticPreview(c, base);
     const p = await c.newPage();
     p.setDefaultTimeout(20000);
     await p.addInitScript(() => localStorage.setItem("kr-lang", "en"));
     await p.goto(base);
-    await p.getByRole("heading", { name: /Your strength/ }).waitFor();
+    await p.getByRole("heading", { name: /Your day/ }).waitFor();
     await p
       .locator(".bottom-nav")
       .getByRole("link", { name: "Progress", exact: true })

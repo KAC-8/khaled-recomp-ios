@@ -1,300 +1,71 @@
 import { useState } from "react";
-import {
-  Check,
-  Droplets,
-  Leaf,
-  Moon,
-  Sun,
-  Utensils,
-  Footprints,
-} from "lucide-react";
-import { PageHeading, Reveal } from "../components/UI";
-import { today, useApp } from "../lib/store";
-import { dayIndex, mealIdeas } from "../lib/calendar";
+import { Check, ChevronDown, RefreshCw, ShoppingBasket, Utensils, X } from "lucide-react";
+import { Modal } from "../components/UI";
 import WeekPlanner from "../components/WeekPlanner";
-import FocusBalance from "../components/FocusBalance";
+import DailyHabits from "../components/DailyHabits";
+import { useApp } from "../lib/store";
+import { chosenMeal, mealNames, mealOptions, mealSlots } from "../lib/meals";
+import type { MealSlot } from "../lib/meals";
+import { displayDate } from "../lib/calendar";
 
 export default function Nutrition() {
-  const { t, habits, toggleHabit, selectedDate, pair } = useApp();
-  const [meal, setMeal] = useState(0);
-  const done = habits[selectedDate] || [];
-  const idea = mealIdeas[dayIndex(selectedDate)];
-  const meals = [
-    {
-      name: t("الفطور", "Breakfast"),
-      title: t("بداية تمنحك طاقة.", "Start with energy."),
-      foods: [
-        t("بيض أو لبن / زبادي", "Eggs or milk / yogurt"),
-        t("خبز حبوب كاملة أو شوفان", "Wholegrain bread or oats"),
-        t("فاكهة تحبها", "Fruit you enjoy"),
-      ],
-      note: t(
-        "مثال مرن؛ عدّل الكمية مع شهيتك واحتياجك، بدون تخطّي الوجبة.",
-        "A flexible example. Adjust to your appetite and needs rather than skipping the meal.",
-      ),
-    },
-    {
-      name: t("الغداء", "Lunch"),
-      title: t("وجبة متوازنة. بطريقتك.", "A balanced plate. Your way."),
-      foods: [
-        t("دجاج، سمك أو عدس", "Chicken, fish or lentils"),
-        t("أرز أو خبز أو بطاطس", "Rice, bread or potatoes"),
-        t("خضار + زيت زيتون أو مكسرات", "Vegetables + olive oil or nuts"),
-      ],
-      note: t(
-        "الكربوهيدرات وقود مفيد للتدريب. لا تحتاج إلغاء الأرز أو الخبز.",
-        "Carbohydrates help fuel training. There’s no need to cut out rice or bread.",
-      ),
-    },
-    {
-      name: t("العشاء", "Dinner"),
-      title: t("اختم يومك بتغذية كافية.", "Finish the day well fed."),
-      foods: [
-        t("ساندويتش تونة أو حمّص", "Tuna or hummus sandwich"),
-        t("خضار أو شوربة", "Vegetables or soup"),
-        t(
-          "لبن أو بديل مدعّم يناسبك",
-          "Milk or a suitable fortified alternative",
-        ),
-      ],
-      note: t(
-        "لا تعوّض عن وجبة كبيرة بتجويع نفسك في اليوم التالي. ارجع لإيقاعك الطبيعي.",
-        "Don’t compensate for a larger meal by going hungry the next day. Return to your regular routine.",
-      ),
-    },
-    {
-      name: t("حول التمرين", "Around training"),
-      title: t("طاقة للحركة. غذاء للتعافي.", "Fuel to move. Food to recover."),
-      foods: [
-        t(
-          "قبل: موزة وخبز أو زبادي إذا ناسبك",
-          "Before: a banana and toast or yogurt if comfortable",
-        ),
-        t(
-          "بعد: وجبتك المعتادة مع مصدر بروتين",
-          "After: your usual meal with a protein source",
-        ),
-        t(
-          "ماء متاح قبل وأثناء وبعد",
-          "Water available before, during and after",
-        ),
-      ],
-      note: t(
-        "تجنّب مشروبات الطاقة ومكمّلات حرق الدهون. لا حاجة لمنتج خاص حتى تتقدّم.",
-        "Avoid energy drinks and fat-burning supplements. Progress doesn’t require a special product.",
-      ),
-    },
-  ];
-  const habitsList = [
-    { id: "meals", icon: Utensils, name: t("وجبات منتظمة", "Regular meals") },
-    {
-      id: "water",
-      icon: Droplets,
-      name: t("شرب الماء خلال اليوم", "Water throughout the day"),
-    },
-    {
-      id: "sleep",
-      icon: Moon,
-      name: t("وقت كافٍ للنوم", "Enough time for sleep"),
-    },
-    {
-      id: "move",
-      icon: Footprints,
-      name: t("حركة أستمتع بها", "Movement I enjoy"),
-    },
-  ];
-  return (
-    <div className="page-container">
-      <PageHeading
-        eyebrow={t("التغذية / طاقة للحياة", "NUTRITION / ENERGY FOR LIFE")}
-        title={t("غذِّ يومك.", "Fuel your day.")}
-        description={t(
-          "عادات بسيطة، وأكل تستمتع فيه. طاقة تكفي للتدريب، الدراسة والنمو.",
-          "Simple habits. Food you enjoy. Enough energy for training, school and growth.",
-        )}
-      />
-      <WeekPlanner kind="nutrition" />
-      <div className="daily-meal-ideas">
-        <span className="small-label">
-          {t(
-            "اقتراحات مرنة لليوم المحدد",
-            "FLEXIBLE IDEAS FOR YOUR SELECTED DAY",
-          )}
-        </span>
-        <div>
-          {[
-            [t("الفطور", "Breakfast"), pair(idea.breakfast)],
-            [t("الغداء", "Lunch"), pair(idea.lunch)],
-            [t("العشاء", "Dinner"), pair(idea.dinner)],
-          ].map(([name, food]) => (
-            <article key={name}>
-              <span>{name}</span>
-              <p>{food}</p>
-            </article>
-          ))}
-        </div>
-        <p className="subtle">
-          {t(
-            "أفكار وليست حصصًا غذائية مفروضة؛ اختر ما يناسب شهيتك واحتياجاتك وحساسياتك.",
-            "Ideas, not prescribed portions. Adapt to your appetite, needs and dietary restrictions.",
-          )}
-        </p>
+  const { t, pair, lang, selectedDate, mealSelections, setMealChoice, notify } = useApp();
+  const [editing, setEditing] = useState<MealSlot | null>(null);
+  const [custom, setCustom] = useState("");
+  const [shopping, setShopping] = useState(false);
+  const [includeSnack, setIncludeSnack] = useState(false);
+  const [checked, setChecked] = useState<string[]>([]);
+  const meals = mealSlots.map((slot) => ({ slot, meal: chosenMeal(selectedDate, slot, mealSelections) }));
+  const shoppingMeals = meals.filter(({ slot }) => includeSnack || slot !== "snack");
+  const ingredients = [...new Map(shoppingMeals.flatMap(({ meal }) => meal.ingredients).map((item) => [item[1], item])).values()];
+  const customMeals = shoppingMeals.filter(({ meal }) => meal.id.startsWith("custom:"));
+  function choose(slot: MealSlot, id: string) {
+    setMealChoice(slot, id);
+    setEditing(null);
+    notify(t("حُفظ اختيار الوجبة لهذا اليوم.", "Meal choice saved for this day."));
+  }
+  return <div className="page-container essentials-page food-page">
+    <div className="essential-heading">
+      <div><span className="small-label">{t("أكلي", "MY FOOD")}</span><h1 tabIndex={-1}>{t("وش آكل اليوم؟", "What’s on the menu?")}</h1>
+        <p>{t("اختر وجبات تناسبك. بدّل، حضّر، وكُل بانتظام.", "Pick meals that suit you. Swap, prepare and eat regularly.")}</p>
       </div>
-      <FocusBalance kind="nutrition" />
-      <div className="nutrition-layout">
-        <div className="nutrition-visual">
-          <img
-            src="/assets/nutrition.webp"
-            alt={t(
-              "طبق متنوّع من الخضار والحبوب والبروتين",
-              "A varied bowl of vegetables, grains and protein",
-            )}
-            loading="lazy"
-          />
-          <div>
-            <Leaf size={21} />
-            <h2>
-              {t("أكل حقيقي.", "Real food.")}
-              <br />
-              {t("حياة حقيقية.", "Real life.")}
-            </h2>
-          </div>
-        </div>
-        <div className="meal-plan">
-          <span className="small-label">
-            {t(
-              "أفكار ليومك · ليست وصفة غذائية",
-              "IDEAS FOR YOUR DAY · NOT A PRESCRIPTION",
-            )}
-          </span>
-          <div
-            className="meal-tabs"
-            role="tablist"
-            aria-label={t("الوجبات", "Meals")}
-          >
-            {meals.map((m, i) => (
-              <button
-                role="tab"
-                aria-selected={meal === i}
-                aria-controls={`meal-${i}`}
-                id={`meal-tab-${i}`}
-                key={m.name}
-                tabIndex={meal === i ? 0 : -1}
-                onKeyDown={(e) => {
-                  if (
-                    ["ArrowRight", "ArrowLeft", "Home", "End"].includes(e.key)
-                  ) {
-                    e.preventDefault();
-                    const n =
-                      e.key === "Home"
-                        ? 0
-                        : e.key === "End"
-                          ? 3
-                          : (meal + (e.key === "ArrowRight" ? 1 : 3)) % 4;
-                    setMeal(n);
-                    document.getElementById(`meal-tab-${n}`)?.focus();
-                  }
-                }}
-                onClick={() => setMeal(i)}
-              >
-                {m.name}
-              </button>
-            ))}
-          </div>
-          <div
-            className="meal-content"
-            key={meal}
-            role="tabpanel"
-            id={`meal-${meal}`}
-            aria-labelledby={`meal-tab-${meal}`}
-          >
-            <Sun size={25} strokeWidth={1.5} />
-            <h2>{meals[meal].title}</h2>
-            <ul>
-              {meals[meal].foods.map((f) => (
-                <li key={f}>
-                  <Check size={17} />
-                  {f}
-                </li>
-              ))}
-            </ul>
-            <p>{meals[meal].note}</p>
-          </div>
-        </div>
-      </div>
-      <Reveal className="habit-section">
-        <div className="section-intro">
-          <div>
-            <span className="small-label">
-              {t("متابعة يومية خفيفة", "A GENTLE DAILY CHECK-IN")}
-            </span>
-            <h2>
-              {t("أشياء صغيرة. فرق كبير.", "Small things. Lasting difference.")}
-            </h2>
-          </div>
-          <span className="habit-count" aria-live="polite">
-            {done.length} / 4
-          </span>
-        </div>
-        <div className="habit-grid">
-          {habitsList.map((h) => (
-            <button
-              key={h.id}
-              className={`habit ${done.includes(h.id) ? "is-done" : ""}`}
-              onClick={() => toggleHabit(h.id)}
-              aria-pressed={done.includes(h.id)}
-              disabled={selectedDate > today()}
-            >
-              <h.icon size={25} strokeWidth={1.5} />
-              <span>{h.name}</span>
-              <span className="habit-check">
-                {done.includes(h.id) ? <Check size={15} /> : null}
-              </span>
-            </button>
-          ))}
-        </div>
-        <p className="subtle">
-          {t(
-            selectedDate > today()
-              ? "يوم قادم: يمكنك التخطيط الآن وتسجيل العادات في يومها."
-              : "للتاريخ المحدد فقط. ليس عليك إكمال كل شيء ليكون يومك جيدًا.",
-            selectedDate > today()
-              ? "A future day: plan now and check in on the day."
-              : "For the selected date. You don’t need every box checked to have a good day.",
-          )}
-        </p>
-      </Reveal>
-      <div className="nutrition-basics">
-        {[
-          [
-            t("البروتين", "Protein"),
-            t(
-              "نوّع مصادره في وجباتك: بيض، لبن، سمك، لحوم أو بقول.",
-              "Include varied sources in meals: eggs, dairy, fish, meat or legumes.",
-            ),
-          ],
-          [
-            t("الكربوهيدرات", "Carbohydrates"),
-            t(
-              "جزء أساسي من الطاقة. اختر ما تحب من حبوب وخبز وأرز وفاكهة.",
-              "An important source of energy. Enjoy grains, bread, rice and fruit.",
-            ),
-          ],
-          [
-            t("الدهون والمغذّيات", "Fats & nutrients"),
-            t(
-              "زيت الزيتون والمكسرات والخضار والفواكه تدعم تنوّع أكلك.",
-              "Olive oil, nuts, vegetables and fruit help keep meals varied.",
-            ),
-          ],
-        ].map(([title, body], i) => (
-          <article key={title}>
-            <span>0{i + 1}</span>
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </article>
-        ))}
-      </div>
+      <button className="button secondary" onClick={() => { setShopping(true); setChecked([]); }}><ShoppingBasket size={18} />{t("المشتريات", "Shopping list")}</button>
     </div>
-  );
+    <WeekPlanner kind="nutrition" />
+    <div className="food-plan-heading"><h2>{t("وجبات اليوم", "Meals for the day")}</h2><span>{t("اختياراتك تُحفظ تلقائيًا", "Your choices save automatically")}</span></div>
+    <div className="meal-board">{meals.map(({ slot, meal }, index) => <article className={`meal-tile ${slot === "snack" ? "snack-tile" : ""}`} key={slot} data-meal={slot}>
+      <div className="meal-tile-top"><span className="meal-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><span>{pair(mealNames[slot])}</span>
+        <button className="swap-meal" aria-label={`${t("تبديل", "Change")} ${pair(mealNames[slot])}`} onClick={() => { setEditing(slot); setCustom(meal.id.startsWith("custom:") ? meal.title[0] : ""); }}><RefreshCw size={15} />{t("بدّل", "Swap")}</button>
+      </div>
+      <h3>{pair(meal.title)}</h3>
+      {meal.ingredients.length > 0 && <p className="meal-components">{meal.ingredients.map(pair).join(" · ")}</p>}
+      <details className="meal-prep"><summary>{t("التحضير", "Preparation")}<ChevronDown size={16} /></summary><p>{pair(meal.prep)}</p></details>
+    </article>)}</div>
+    <p className="meal-context">{t("أفكار مرنة وليست حصصًا مفروضة. عدّل الكمية حسب شهيتك واحتياجك، واختر مكونات تناسب حساسياتك. الوجبة الخفيفة حسب حاجتك.", "Flexible ideas, not prescribed portions. Adjust amounts to your appetite and needs, choose ingredients that suit your dietary restrictions, and have a snack when needed.")}</p>
+    <section className="food-checkin"><div><Utensils size={21} /><h2>{t("متابعة بسيطة", "A simple check-in")}</h2></div><DailyHabits foodOnly /></section>
+    <p className="flex-note"><strong dir="ltr">80 / 20</strong>{t("وجبات منتظمة ومتنوعة، ومرونة للأكل اللي تحبه. بدون حرمان أو تعويض.", "Regular, varied meals, with room for food you enjoy. No restriction or compensation.")}</p>
+    <details className="health-details"><summary>{t("بخصوص تغيير الوزن", "About changing weight")}<ChevronDown size={16} /></summary><p>{t("في مرحلة النمو، ناقش أي هدف لتغيير الوزن مع ولي أمرك وطبيب أو أخصائي تغذية مؤهّل. هذه الصفحة لتنظيم أكلك، وليست حمية للتنحيف.", "While growing, discuss any weight-change goal with a parent or carer and a qualified clinician or dietitian. This page helps organize meals; it is not a weight-loss diet.")} <a href="https://www.healthychildren.org/English/ages-stages/teen/nutrition/Pages/Fads-and-Diets.aspx" target="_blank" rel="noreferrer">{t("المصدر: الأكاديمية الأمريكية لطب الأطفال", "Source: American Academy of Pediatrics")}</a></p></details>
+    {editing && <Modal title={`${t("اختَر", "Choose")} ${pair(mealNames[editing])}`} onClose={() => setEditing(null)}>
+      <div className="meal-picker"><p>{displayDate(selectedDate, lang, true)}</p>
+        <div className="meal-options">{mealOptions[editing].map((option) => {
+          const selected = chosenMeal(selectedDate, editing, mealSelections).id === option.id;
+          return <button key={option.id} onClick={() => choose(editing, option.id)} aria-pressed={selected}><span><strong>{pair(option.title)}</strong><small>{option.ingredients.map(pair).join(" · ")}</small></span>{selected ? <Check size={20} /> : <RefreshCw size={17} />}</button>;
+        })}</div>
+        <form onSubmit={(event) => { event.preventDefault(); if (custom.trim()) choose(editing, `custom:${custom.trim()}`); }}>
+          <label htmlFor="custom-meal">{t("أو وجبة من اختيارك", "Or your own meal")}</label>
+          <input id="custom-meal" required maxLength={160} value={custom} onChange={(event) => setCustom(event.target.value)} placeholder={t("مثال: وجبة البيت مع الأهل", "For example: a family meal at home")} />
+          <button className="button full" type="submit" disabled={!custom.trim()}>{t("حفظ وجبتي", "Save my meal")}<Check size={17} /></button>
+        </form>
+      </div>
+    </Modal>}
+    {shopping && <Modal title={t("مشتريات هذا اليوم", "Shopping for this day")} onClose={() => setShopping(false)}>
+      <div className="shopping-list"><p>{displayDate(selectedDate, lang, true)}</p>
+        <label className="snack-option"><input type="checkbox" checked={includeSnack} onChange={(event) => setIncludeSnack(event.target.checked)} />{t("أضف مكونات الوجبة الخفيفة", "Include snack ingredients")}</label>
+        <ul>{ingredients.map((ingredient) => <li key={ingredient[1]}><label><input type="checkbox" checked={checked.includes(ingredient[1])} onChange={() => setChecked((values) => values.includes(ingredient[1]) ? values.filter((value) => value !== ingredient[1]) : [...values, ingredient[1]])} /><span>{pair(ingredient)}</span></label></li>)}</ul>
+        {customMeals.length > 0 && <p className="shopping-custom">{t("أضف مكونات وجبتك الخاصة بنفسك:", "Add ingredients for your own meals separately:")} {customMeals.map(({ meal }) => pair(meal.title)).join(" · ")}</p>}
+        <p className="subtle">{t("من اختيارات هذا اليوم. علامات المشتريات مؤقتة؛ حدّد الكميات التي تحتاجها.", "From this day’s choices. Shopping checks are temporary; choose the amounts you need.")}</p>
+        <button className="button full" onClick={() => setShopping(false)}>{t("إغلاق القائمة", "Close list")}<X size={16} /></button>
+      </div>
+    </Modal>}
+  </div>;
 }
