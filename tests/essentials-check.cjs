@@ -11,7 +11,7 @@ async function test(name, fn) { try { await fn(); results.push({ name, passed:tr
 async function ready(page, route) { await page.goto(base + route); await page.locator('h1').waitFor(); await page.locator('.week-day').first().waitFor(); }
 async function saveState(page) { return page.evaluate(() => JSON.parse(localStorage.getItem('khalid-cut-v1'))); }
 (async () => {
- const browser = await chromium.launch({headless:true, downloadsPath: __dirname + "/../test-results/downloads"});
+ const browser = await chromium.launch({headless:true});
  const context = await browser.newContext({...contextOptions, viewport:{width:1440,height:1000}, colorScheme:'light', timezoneId:'Asia/Riyadh'});
  await staticPreview(context,base);
  await context.addInitScript(()=>{ if(!localStorage.getItem('kr-lang')) localStorage.setItem('kr-lang','en'); });

@@ -9,6 +9,7 @@
     "preview": "vite preview --host 127.0.0.1",
     "test:e2e": "node tests/browser-check.cjs",
     "test:upgrade": "node tests/essentials-check.cjs",
+    "test:guides": "node tests/guides-check.cjs",
     "ios:add": "cap add ios",
     "ios:copy": "npm run build && cap copy ios"
   },

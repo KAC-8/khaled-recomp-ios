@@ -16,6 +16,7 @@ import type { ExerciseId } from "../lib/data";
 import { today, useApp } from "../lib/store";
 import { dayIndex, displayDate } from "../lib/calendar";
 import WeekPlanner from "../components/WeekPlanner";
+import MovementGuide from "../components/MovementGuide";
 const ExerciseScene = lazy(() => import("../components/ExerciseScene"));
 
 function RestTimer({ seconds }: { seconds: number }) {
@@ -71,12 +72,12 @@ export default function Train() {
   const [selected, setSelected] = useState<ExerciseId>("pushup"),
     [playing, setPlaying] = useState(!reduced),
     [phase, setPhase] = useState(45),
+    [poseRequest, setPoseRequest] = useState(0),
     [view, setView] = useState<"angle" | "side" | "front" | "back">("angle"),
     [speed, setSpeed] = useState(1),
     [highlight, setHighlight] = useState(true),
     [session, setSession] = useState("a"),
-    [open, setOpen] = useState(false),
-    [level, setLevel] = useState<"base" | "easier">("base");
+    [open, setOpen] = useState(false);
   useEffect(() => {
     if (reduced) setPlaying(false);
   }, [reduced]);
@@ -89,6 +90,11 @@ export default function Train() {
   const done =
     training.find((s) => s.date === selectedDate && s.session === session)
       ?.done || [];
+  const showPart = (id: string) => {
+    const part = document.getElementById(id);
+    part?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
+    part?.focus({ preventScroll: true });
+  };
   return (
     <div className="page-container train-page">
       <PageHeading
@@ -120,8 +126,8 @@ export default function Train() {
             className={selected === x.id ? "selected" : ""}
             onClick={() => {
               setSelected(x.id);
-              setLevel("base");
               setPhase(45);
+              setPoseRequest((request) => request + 1);
             }}
           >
             <span>0{i + 1}</span>
@@ -133,6 +139,8 @@ export default function Train() {
       <div className="movement-layout">
         <section
           className="movement-stage"
+          id="movement-stage"
+          tabIndex={-1}
           aria-label={t("عرض الحركة", "Movement demonstration")}
         >
           <div className="stage-top">
@@ -157,6 +165,7 @@ export default function Train() {
               view={view}
               speed={speed}
               highlight={highlight}
+              poseRequest={poseRequest}
             />
           </Suspense>
           <div className="stage-hint">
@@ -234,6 +243,7 @@ export default function Train() {
             </div>
           </div>
           </details>
+          <button className="back-to-guide" onClick={() => showPart("movement-guide")}>{t("العودة لشرح الحركة", "Back to movement guide")}<ChevronRight size={16} /></button>
         </section>
         <section className="movement-info" key={selected}>
           <span className="small-label">{pair(e.group)}</span>
@@ -263,41 +273,8 @@ export default function Train() {
               <span>{t("راحة", "REST")}</span>
             </div>
           </div>
-          <div className="technique">
-            <h3>{t("تفاصيل تصنع الفرق", "THE DETAILS THAT MATTER")}</h3>
-            <ol>
-              {e.cues.map((cue, i) => (
-                <li key={cue[1]}>
-                  <span>0{i + 1}</span>
-                  <p>{pair(cue)}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div className="level-toggle">
-            <button
-              aria-pressed={level === "base"}
-              className={level === "base" ? "active" : ""}
-              onClick={() => setLevel("base")}
-            >
-              {t("الأساس", "Foundation")}
-            </button>
-            <button
-              aria-pressed={level === "easier"}
-              className={level === "easier" ? "active" : ""}
-              onClick={() => setLevel("easier")}
-            >
-              {t("نسخة أسهل", "Make it easier")}
-            </button>
-          </div>
-          <p className="level-note">
-            {level === "easier"
-              ? pair(e.easier)
-              : t(
-                  "اترك تكرارين أو أكثر قبل التعب التام. ابدأ بمجموعتين، وعدّل مع مدربك حسب تمارين النادي.",
-                  "Keep at least two reps in reserve. Begin with two sets and adjust with your coach around gym sessions.",
-                )}
-          </p>
+          <MovementGuide key={selected} exercise={selected} onPose={(position) => { setPlaying(false); setPhase(position); setPoseRequest((request) => request + 1); }} onView={() => showPart("movement-stage")} />
+          <p className="level-note">{t("اترك تكرارين أو أكثر قبل التعب التام. ابدأ بمجموعتين، وعدّل مع مدربك حسب تمارين النادي.", "Keep at least two reps in reserve. Begin with two sets and adjust with your coach around gym sessions.")}</p>
           <p className="caution">{pair(e.caution)}</p>
         </section>
       </div>

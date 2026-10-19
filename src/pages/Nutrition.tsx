@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Check, ChevronDown, RefreshCw, ShoppingBasket, Utensils, X } from "lucide-react";
+import { ArrowUpRight, Check, ChevronDown, RefreshCw, ShoppingBasket, Utensils, X } from "lucide-react";
 import { Modal } from "../components/UI";
 import WeekPlanner from "../components/WeekPlanner";
 import DailyHabits from "../components/DailyHabits";
+import RecipeGuide from "../components/RecipeGuide";
 import { useApp } from "../lib/store";
 import { chosenMeal, mealNames, mealOptions, mealSlots } from "../lib/meals";
-import type { MealSlot } from "../lib/meals";
+import type { MealOption, MealSlot } from "../lib/meals";
+import { recipes } from "../lib/recipes";
 import { displayDate } from "../lib/calendar";
 
 export default function Nutrition() {
@@ -13,6 +15,7 @@ export default function Nutrition() {
   const [editing, setEditing] = useState<MealSlot | null>(null);
   const [custom, setCustom] = useState("");
   const [shopping, setShopping] = useState(false);
+  const [cooking, setCooking] = useState<MealOption | null>(null);
   const [includeSnack, setIncludeSnack] = useState(false);
   const [checked, setChecked] = useState<string[]>([]);
   const meals = mealSlots.map((slot) => ({ slot, meal: chosenMeal(selectedDate, slot, mealSelections) }));
@@ -39,12 +42,14 @@ export default function Nutrition() {
       </div>
       <h3>{pair(meal.title)}</h3>
       {meal.ingredients.length > 0 && <p className="meal-components">{meal.ingredients.map(pair).join(" · ")}</p>}
-      <details className="meal-prep"><summary>{t("التحضير", "Preparation")}<ChevronDown size={16} /></summary><p>{pair(meal.prep)}</p></details>
+      {recipes[meal.id] ? <div className="meal-prep recipe-entry"><span>{pair(recipes[meal.id].time)}</span><button aria-label={`${t("طريقة التحضير", "Preparation")} · ${pair(mealNames[slot])}`} onClick={() => setCooking(meal)}>{t("طريقة التحضير", "Preparation")}<ArrowUpRight size={17} /></button></div>
+        : <p className="custom-meal-note">{pair(meal.prep)}</p>}
     </article>)}</div>
     <p className="meal-context">{t("أفكار مرنة وليست حصصًا مفروضة. عدّل الكمية حسب شهيتك واحتياجك، واختر مكونات تناسب حساسياتك. الوجبة الخفيفة حسب حاجتك.", "Flexible ideas, not prescribed portions. Adjust amounts to your appetite and needs, choose ingredients that suit your dietary restrictions, and have a snack when needed.")}</p>
     <section className="food-checkin"><div><Utensils size={21} /><h2>{t("متابعة بسيطة", "A simple check-in")}</h2></div><DailyHabits foodOnly /></section>
     <p className="flex-note"><strong dir="ltr">80 / 20</strong>{t("وجبات منتظمة ومتنوعة، ومرونة للأكل اللي تحبه. بدون حرمان أو تعويض.", "Regular, varied meals, with room for food you enjoy. No restriction or compensation.")}</p>
     <details className="health-details"><summary>{t("بخصوص تغيير الوزن", "About changing weight")}<ChevronDown size={16} /></summary><p>{t("في مرحلة النمو، ناقش أي هدف لتغيير الوزن مع ولي أمرك وطبيب أو أخصائي تغذية مؤهّل. هذه الصفحة لتنظيم أكلك، وليست حمية للتنحيف.", "While growing, discuss any weight-change goal with a parent or carer and a qualified clinician or dietitian. This page helps organize meals; it is not a weight-loss diet.")} <a href="https://www.healthychildren.org/English/ages-stages/teen/nutrition/Pages/Fads-and-Diets.aspx" target="_blank" rel="noreferrer">{t("المصدر: الأكاديمية الأمريكية لطب الأطفال", "Source: American Academy of Pediatrics")}</a></p></details>
+    {cooking && <RecipeGuide key={cooking.id} meal={cooking} onClose={() => setCooking(null)} />}
     {editing && <Modal title={`${t("اختَر", "Choose")} ${pair(mealNames[editing])}`} onClose={() => setEditing(null)}>
       <div className="meal-picker"><p>{displayDate(selectedDate, lang, true)}</p>
         <div className="meal-options">{mealOptions[editing].map((option) => {

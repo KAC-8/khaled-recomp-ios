@@ -78,6 +78,7 @@ export default function ExerciseScene({
   view,
   speed,
   highlight,
+  poseRequest,
 }: {
   exercise: ExerciseId;
   playing: boolean;
@@ -85,6 +86,7 @@ export default function ExerciseScene({
   view: "angle" | "side" | "front" | "back";
   speed: number;
   highlight: boolean;
+  poseRequest: number;
 }) {
   const mount = useRef<HTMLDivElement>(null);
   const { t, theme } = useApp();
@@ -96,8 +98,9 @@ export default function ExerciseScene({
     speed,
     highlight,
     theme,
+    poseRequest,
   });
-  values.current = { exercise, playing, phase, view, speed, highlight, theme };
+  values.current = { exercise, playing, phase, view, speed, highlight, theme, poseRequest };
   const [failed, setFailed] = useState(false);
   useEffect(() => {
     const host = mount.current!;
@@ -362,7 +365,8 @@ export default function ExerciseScene({
       oldExercise = "",
       oldView = "",
       oldTheme = "",
-      oldPhase = values.current.phase;
+      oldPhase = values.current.phase,
+      oldPoseRequest = values.current.poseRequest;
     const resize = new ResizeObserver(() => {
       const w = host.clientWidth,
         h = host.clientHeight;
@@ -387,7 +391,7 @@ export default function ExerciseScene({
       last = now;
       if (!visible || document.hidden) return;
       cursor = 0;
-      const { exercise, playing, phase, view, speed, highlight, theme } =
+      const { exercise, playing, phase, view, speed, highlight, theme, poseRequest } =
         values.current;
       if (theme !== oldTheme) {
         const dark = theme === "dark",
@@ -402,9 +406,10 @@ export default function ExerciseScene({
         rim.intensity = dark ? 1.5 : 1.8;
         oldTheme = theme;
       }
-      if (phase !== oldPhase) {
+      if (phase !== oldPhase || poseRequest !== oldPoseRequest) {
         time = Math.acos(1 - (2 * phase) / 100) / (Math.PI * 0.6);
         oldPhase = phase;
+        oldPoseRequest = poseRequest;
       }
       if (playing) time += dt * speed;
       const u = (1 - Math.cos(time * Math.PI * 0.6)) / 2;

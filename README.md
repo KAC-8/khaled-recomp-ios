@@ -27,6 +27,10 @@ The production build is `dist/`. `vercel.json` configures Vite and direct-route 
 - The enhanced 3D mannequin uses smoother contours, anatomical detail, four camera presets, half-speed playback and optional illustrative muscle highlights. The renderer stays lazy-loaded and pauses activity offscreen.
 - Content supports growth, regular meals, training quality and recovery. There is no calorie-deficit calculator, target weight-loss rate, BMI score or reward for weight loss. Intentional weight change for a minor is referred to a guardian and qualified clinician/dietitian. The prior gym schedule is removed from the product.
 
+The meal guide has 15 original, bilingual preparation guides with approximate times, equipment, numbered steps, ingredient alternatives and an optional single-step cooking view. Custom meal names do not receive invented instructions. Cooking-view progress is temporary and does not mark meals or habits complete. Poultry/fish doneness references FoodSafety.gov.
+
+The exercise guide covers setup, breathing, three stages, common errors and easier alternatives. Selecting a stage pauses the illustrative 3D model at a matching position; selecting the same position again after playback resets it. Mobile controls jump between the guide and model. The model still shows the foundation version; easier alternatives and hollow-hold entry/exit are explained in text. Movement references link to ACE and NASM.
+
 ## Browser checks
 
 With the production preview running on port 4173:
@@ -35,6 +39,7 @@ With the production preview running on port 4173:
 npx playwright install chromium webkit
 npm run test:e2e
 npm run test:upgrade
+npm run test:guides
 ```
 
 Set `QA_BASE` to test another origin. The script creates isolated browser contexts and tests route/language changes, 3D controls, dated sessions, rest timer, meal selection/preparation and habits, check-in validation/editing/persistence, backup restore, deletion, PWA offline behavior, reduced motion, RTL/LTR at 360/390/768/1440/1920 px, WCAG A/AA automated checks, and a WebKit mobile flow. Reports and screenshots are written to ignored `test-results/`. Tests use synthetic local records only. Responsive/WebKit emulation is not a physical iPhone device test.

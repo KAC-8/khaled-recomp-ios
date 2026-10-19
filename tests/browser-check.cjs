@@ -23,7 +23,7 @@ const localDate = (offset = 0) => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 (async () => {
-  const browser = await chromium.launch({ headless: true, downloadsPath: __dirname + "/../test-results/downloads" });
+  const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     ...contextOptions,
     viewport: { width: 1440, height: 1000 },
@@ -152,8 +152,9 @@ const localDate = (offset = 0) => {
     "Meal preparation, swapping and saved habits",
     async () => {
       await page.goto(base + "/nutrition");
-      await page.locator('[data-meal="lunch"] .meal-prep summary').click();
-      await page.locator('[data-meal="lunch"] .meal-prep p').waitFor();
+      await page.locator('[data-meal="lunch"] .recipe-entry button').click();
+      await page.locator('.recipe-steps li').first().waitFor();
+      await page.keyboard.press("Escape");
       await page.getByRole("button", { name: "Change Lunch", exact: true }).click();
       await page.locator(".meal-options button").first().click();
       await page.getByRole("dialog").waitFor({ state: "hidden" });
